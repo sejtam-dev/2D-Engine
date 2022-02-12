@@ -1,6 +1,6 @@
-[submodule "3rdparty/glad"]
-	path = Engine/3rdparty/glad
-	url = https://github.com/Dav1dde/glad.git
+[submodule "3rdparty/glew-cmake"]
+	path = Engine/3rdparty/glew-cmake
+	url = https://github.com/Perlmint/glew-cmake.git
 
 [submodule "3rdparty/glfw"]
 	path = Engine/3rdparty/glfw
