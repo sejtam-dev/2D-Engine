@@ -2,7 +2,7 @@
 
 Engine::Engine()
 {
-	window = new Window(800, 600, "Test");
+	window = new Window(800, 600, "Engine");
 }
 
 void Engine::run()

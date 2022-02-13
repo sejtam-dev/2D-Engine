@@ -42,3 +42,11 @@ void Window::changeSizeEvent(EngineChangeSize event)
 {
 	m_changeSizeEvent = event;
 }
+
+void Window::changeSize(int width, int height)
+{
+	this->width = width;
+	this->height = height;
+
+	glfwSetWindowSize(m_window, width, height);
+}

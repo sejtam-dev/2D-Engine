@@ -7,11 +7,12 @@ class ENGINE_API Window
 public:
 	typedef void(*EngineChangeSize)(Window* window, int width, int height);
 
-	int width;
-	int height;
 	std::string title;
 
 private:
+	int width;
+	int height;
+
 	GLFWwindow* m_window;
 	EngineChangeSize m_changeSizeEvent;
 
@@ -22,6 +23,7 @@ public:
 	Window(int width, int height, std::string title);
 	~Window();
 
+	void createWindow();
 	GLFWwindow* glfwWindow() const
 	{
 		return m_window;
@@ -32,9 +34,17 @@ public:
 	}
 
 	void changeSizeEvent(EngineChangeSize event);
-	void createWindow();
+	void changeSize(int width, int height);
+
+	int getWidth() const
+	{
+		return width;
+	}
+	int getHeight() const
+	{
+		return width;
+	}
 
 private:
 	static void framebufferResizeCallback(GLFWwindow* window, int width, int height);
-
 };
