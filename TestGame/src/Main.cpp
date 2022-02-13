@@ -2,16 +2,68 @@
 
 int main()
 {
-	const Engine engine;
-
-	while (!engine.window->shouldClose())
-	{
-		glClearColor(0.07f, 0.13f, 0.17f, 1.0f);
-		glClear(GL_COLOR_BUFFER_BIT);
-
-		glfwSwapBuffers(engine.window->glfwWindow());
-		glfwPollEvents();
-	}
+	const std::unique_ptr<Game> game(new Game());
+	game->run();
 
 	return 0;
+}
+
+Game::Game()
+{
+	window->title = "TestGame";
+}
+
+void Game::init()
+{
+	window->changeSizeEvent(changeSize);
+}
+
+void Game::loadContent()
+{
+
+}
+
+void Game::unloadContent()
+{
+
+}
+
+void Game::update()
+{
+	//std::cout << deltaTime << std::endl;
+}
+
+void Game::draw()
+{
+	glBegin(GL_TRIANGLES);
+
+	glColor3f(0, 0, 1);
+	glVertex2f(-0.5, -0.5);
+	glVertex2f(0, 0);
+	glVertex2f(-0.5, 0.5);
+
+	glColor3f(1, 1, 1);
+	glVertex2f(-0.5, 0.5);
+	glVertex2f(0, 0);
+	glVertex2f(0.5, 0.5);
+
+	glVertex2f(0.5, 0.5);
+	glVertex2f(0, 0);
+	glVertex2f(0.5, 0);
+
+	glColor3f(1, 0, 0);
+	glVertex2f(-0.5, -0.5);
+	glVertex2f(0, 0);
+	glVertex2f(0.5, -0.5);
+
+	glVertex2f(0.5, -0.5);
+	glVertex2f(0, 0);
+	glVertex2f(0.5, 0);
+
+	glEnd();
+}
+
+void Game::changeSize(Window* window, int width, int height)
+{
+
 }

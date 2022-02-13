@@ -6,83 +6,9 @@ message("=")
 
 # Project root directory
 set(TEST_GAME_ROOT_DIR ${CMAKE_CURRENT_LIST_DIR})
-get_filename_component(TEST_GAME_PARENT_DIR ${TEST_GAME_ROOT_DIR} DIRECTORY)
 
 message("= Root Directory: ${TEST_GAME_ROOT_DIR}")
 message("=")
-
-# C++ Standarts
-set(CMAKE_CXX_STANDARD 11)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
-
-# Project Settings
-message("= C++ Version: ${CMAKE_CXX_STANDARD}")
-message("= C++ Compiler: ${CMAKE_CXX_COMPILER_ID}")
-message("= C++ Compiler Path: ${CMAKE_CXX_COMPILER}")
-message("=")
-message("=== Architecture ===")
-message("=")
-
-# project architecture
-if(${CMAKE_SIZEOF_VOID_P} MATCHES 8)
-    set(PROJECT_ARCHITECTURE x64)
-else()
-    set(PROJECT_ARCHITECTURE x86)
-endif()
-
-message("= Architecture: ${PROJECT_ARCHITECTURE}")
-
-# Project OS
-if(WIN32 OR MSVC OR MSYS OR MINGW)
-    set(WINDOWS true)    
-
-    if(PROJECT_ARCHITECTURE STREQUAL x64)
-        set(WINDOWS64 true)
-        set(PROJECT_OS "Win64")
-    else()
-        set(WINDOWS32 true)
-        set(PROJECT_OS "Win32")
-    endif()
-elseif(UNIX AND NOT APPLE)
-    set(LINUX true)
-
-    if(PROJECT_ARCHITECTURE STREQUAL x64)
-        set(LINUX64 true)
-        set(PROJECT_OS "Linux64")
-    else()
-        set(LINUX32 true)
-        set(PROJECT_OS "Linux32")
-    endif()
-endif()
-
-message("= OS: ${PROJECT_OS}")
-message("=")
-
-## Dependencies
-message("=== Dependencies ===")
-message("=")
-
-# Engine
-message("== Engine")
-message("=")
-
-set(ENGINE_ROOT_DIR ${TEST_GAME_PARENT_DIR}/Engine)
-message("= Root Directory: ${ENGINE_ROOT_DIR}")
-message("=")
-
-if(TARGET Engine)    
-    set(ENGINE_INCLUDE_DIR ${ENGINE_ROOT_DIR}/include)
-
-    message("= Status: Found")
-else()
-    message("= Status: Not Found")
-endif()
-message("=")
-
-## Project
-message("=== Project ========")
-message("=")
-
 message("= Version: ${Engine_VERSION}")
 message("= ")
 
@@ -103,6 +29,7 @@ set(TEST_GAME_INCLUDE_DIRS)
 set(TEST_GAME_LIBRARIES)
 
 # Engine
+set(ENGINE_INCLUDE_DIR ${ROOT_DIR}/Engine/include)
 list(APPEND TEST_GAME_INCLUDE_DIRS ${ENGINE_INCLUDE_DIR})
 list(APPEND TEST_GAME_LIBRARIES Engine)
 
@@ -114,6 +41,30 @@ add_executable(TestGame ${TEST_GAME_SOURCES})
 target_include_directories(TestGame PUBLIC ${TEST_GAME_INCLUDE_DIRS})
 target_link_libraries(TestGame PRIVATE ${TEST_GAME_LIBRARIES})
 
+set_target_properties(TestGame
+    PROPERTIES
+        RUNTIME_OUTPUT_DIRECTORY ${ROOT_DIR}/build/${CMAKE_BUILD_TYPE}/bin/TestGame
+        LIBRARY_OUTPUT_DIRECTORY ${ROOT_DIR}/build/${CMAKE_BUILD_TYPE}/lib/TestGame
+        ARCHIVE_OUTPUT_DIRECTORY ${ROOT_DIR}/build/${CMAKE_BUILD_TYPE}/lib/TestGame
+)
+
+add_custom_command(TARGET TestGame POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different
+        ${ROOT_DIR}/build/${CMAKE_BUILD_TYPE}/bin/Engine/Engine.dll
+        ${ROOT_DIR}/build/${CMAKE_BUILD_TYPE}/bin/TestGame/
+)
+
+add_custom_command(TARGET TestGame POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different
+        ${ROOT_DIR}/build/${CMAKE_BUILD_TYPE}/bin/glfw/glfw3.dll
+        ${ROOT_DIR}/build/${CMAKE_BUILD_TYPE}/bin/TestGame/
+)
+
+add_custom_command(TARGET TestGame POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different
+        ${ROOT_DIR}/build/${CMAKE_BUILD_TYPE}/bin/glew/glew-sharedd.dll
+        ${ROOT_DIR}/build/${CMAKE_BUILD_TYPE}/bin/TestGame/
+)
 
 message("=")
 message("====================")

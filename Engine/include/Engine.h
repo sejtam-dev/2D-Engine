@@ -1,36 +1,50 @@
 #pragma once
 
-#include <iostream>
-
-#define GLEW_STATIC
-#include "GL/glew.h"
-#include <GLFW/glfw3.h>
-
+#include "Static.h"
 #include "Window.h"
 
-#ifdef Engine_EXPORTS
-#define Engine_API __declspec(dllexport)
-#else
-#define Engine_API __declspec(dllimport)
-#endif
+#include <sstream>
 
-class Engine_API Engine
+class ENGINE_API Engine
 {
+private:
+	float m_currentTime = 0.0f;
+	float m_lastTime = 0.0f;
+
+	float m_fpsLastTime = 0.0f;
+	int m_frames = 0;
+
 public:
 	Window* window;
 
+	float deltaTime = 0.0f;
+	float fps = 0.0f;
+
+	Engine(const Engine&) = delete;
+	Engine& operator=(const Engine&) = delete;
+
 	Engine();
-	~Engine();
+
+	void run();
+
+protected:
+	virtual void init() {}
+
+	virtual void loadContent() {}
+	virtual void unloadContent() {}
+
+	virtual void update() {}
+	virtual void draw() {}
 
 private:
 	static void initGLEW()
 	{
-		glewExperimental = GL_TRUE;
 		if (glewInit() != GLEW_OK)
 		{
 			std::cerr << "GLEW initialization failed." << std::endl;
-
-			return;
 		}
 	}
+
+	void updateDeltaTime();
+	void calculateFPS();
 };

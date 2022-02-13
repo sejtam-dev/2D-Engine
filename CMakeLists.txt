@@ -1,6 +1,124 @@
 ﻿cmake_minimum_required (VERSION 3.8)
 
+message("==== Project ====")
+message("=")
+
 project(Engine VERSION 1.0.0)
+
+set(ROOT_DIR ${CMAKE_CURRENT_LIST_DIR})
+message("= Root Directory: ${ROOT_DIR}")
+message("=")
+
+# C++ Standarts
+set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+## Create project
+message("= C++ Version: ${CMAKE_CXX_STANDARD}")
+message("= C++ Compiler: ${CMAKE_CXX_COMPILER_ID}")
+message("= C++ Compiler Path: ${CMAKE_CXX_COMPILER}")
+message("=")
+message("=== Architecture ===")
+message("=")
+
+# Project architecture
+if(${CMAKE_SIZEOF_VOID_P} MATCHES 8)
+    set(PROJECT_ARCHITECTURE x64)
+else()
+    set(PROJECT_ARCHITECTURE x86)
+endif()
+
+message("= Architecture: ${PROJECT_ARCHITECTURE}")
+
+# Project OS
+if(WIN32 OR MSVC OR MSYS OR MINGW)
+    set(WINDOWS true)    
+
+    if(PROJECT_ARCHITECTURE STREQUAL x64)
+        set(WINDOWS64 true)
+        set(PROJECT_OS "Win64")
+    else()
+        set(WINDOWS32 true)
+        set(PROJECT_OS "Win32")
+    endif()
+elseif(UNIX AND NOT APPLE)
+    set(LINUX true)
+
+    if(PROJECT_ARCHITECTURE STREQUAL x64)
+        set(LINUX64 true)
+        set(PROJECT_OS "Linux64")
+    else()
+        set(LINUX32 true)
+        set(PROJECT_OS "Linux32")
+    endif()
+endif()
+
+message("= OS: ${PROJECT_OS}")
+message("=")
+
+## Libraries
+message("=== Libraries ===")
+message("=")
+
+# GLFW
+message("== GLFW")
+message("=")
+
+set(GLFW_ROOT_DIR ${ROOT_DIR}/3rdparty/glfw)
+message("= Root Directory: ${GLFW_ROOT_DIR}")
+message("=")
+
+set(BUILD_SHARED_LIBS ON)
+set(GLFW_BUILD_DOCS OFF)
+set(GLFW_INSTALL ON)
+
+add_subdirectory(${GLFW_ROOT_DIR})
+
+if(TARGET glfw)    
+    set(GLFW_INCLUDE_DIR ${GLFW_ROOT_DIR}/include)
+
+    message("= Status: Found")
+else()
+    message("= Status: Not Found")
+endif()
+
+set_target_properties(glfw
+    PROPERTIES
+        RUNTIME_OUTPUT_DIRECTORY ${ROOT_DIR}/build/${CMAKE_BUILD_TYPE}/bin/glfw
+        LIBRARY_OUTPUT_DIRECTORY ${ROOT_DIR}/build/${CMAKE_BUILD_TYPE}/lib/glfw
+        ARCHIVE_OUTPUT_DIRECTORY ${ROOT_DIR}/build/${CMAKE_BUILD_TYPE}/lib/glfw
+)
+
+message("=")
+
+# GLEW
+message("== GLEW")
+message("=")
+
+set(GLEW_ROOT_DIR ${ROOT_DIR}/3rdparty/glew-cmake)
+message("= Root Directory: ${GLEW_ROOT_DIR}")
+message("=")
+
+add_subdirectory(${GLEW_ROOT_DIR})
+
+if(TARGET libglew_static)
+    set(GLEW_INCLUDE_DIR ${GLEW_ROOT_DIR}/include)
+
+    message("= Status: Found")
+else()
+    message("= Status: Not Found")
+endif()
+
+set_target_properties(libglew_shared
+    PROPERTIES
+        RUNTIME_OUTPUT_DIRECTORY ${ROOT_DIR}/build/${CMAKE_BUILD_TYPE}/bin/glew
+        LIBRARY_OUTPUT_DIRECTORY ${ROOT_DIR}/build/${CMAKE_BUILD_TYPE}/lib/glew
+        ARCHIVE_OUTPUT_DIRECTORY ${ROOT_DIR}/build/${CMAKE_BUILD_TYPE}/lib/glew
+)
+
+message("=")
+message("====================")
+message("")
 
 add_subdirectory(Engine)
 add_subdirectory(TestGame)

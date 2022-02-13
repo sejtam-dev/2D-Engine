@@ -1,18 +1,19 @@
 #pragma once
 
-#include <iostream>
+#include "Static.h"
 
-#include <GLFW/glfw3.h>
-
-class Window
+class ENGINE_API Window
 {
 public:
+	typedef void(*EngineChangeSize)(Window* window, int width, int height);
+
 	int width;
 	int height;
-	const std::string title;
+	std::string title;
 
 private:
-	GLFWwindow* window;
+	GLFWwindow* m_window;
+	EngineChangeSize m_changeSizeEvent;
 
 public:
 	Window(const Window&) = delete;
@@ -23,15 +24,17 @@ public:
 
 	GLFWwindow* glfwWindow() const
 	{
-		return window;
+		return m_window;
 	}
 	bool shouldClose() const
 	{
-		return glfwWindowShouldClose(window);
+		return glfwWindowShouldClose(m_window);
 	}
 
-private:
+	void changeSizeEvent(EngineChangeSize event);
 	void createWindow();
+
+private:
 	static void framebufferResizeCallback(GLFWwindow* window, int width, int height);
 
 };

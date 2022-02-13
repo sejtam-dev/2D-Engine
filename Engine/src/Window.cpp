@@ -2,37 +2,43 @@
 
 Window::Window(int const width, int const height, std::string title) : width(width), height(height), title(std::move(title))
 {
-	createWindow();
+	glfwInit();
 }
 
 Window::~Window()
 {
-	if(window != nullptr)
+	if(m_window != nullptr)
 	{
-		glfwDestroyWindow(window);
+		glfwDestroyWindow(m_window);
 	}
 }
 
 void Window::createWindow()
 {
-	glfwInit();
 	glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE);
 
-	window = glfwCreateWindow(width, height, title.c_str(), nullptr, nullptr);
-	if(window == nullptr)
+	m_window = glfwCreateWindow(width, height, title.c_str(), nullptr, nullptr);
+	if(m_window == nullptr)
 	{
 		std::cerr << "GLFW window creation failed!" << std::endl;
 	}
 
-	glfwMakeContextCurrent(window);
+	glfwMakeContextCurrent(m_window);
 
-	glfwSetWindowUserPointer(window, this);
-	glfwSetFramebufferSizeCallback(window, framebufferResizeCallback);
+	glfwSetWindowUserPointer(m_window, this);
+	glfwSetFramebufferSizeCallback(m_window, framebufferResizeCallback);
 }
 
-void Window::framebufferResizeCallback(GLFWwindow* window, int const width, int const height) {
-	auto const engineWindow = static_cast<Window*>(glfwGetWindowUserPointer(window));
+void Window::framebufferResizeCallback(GLFWwindow* window, int width, int height) {
+	auto engineWindow = reinterpret_cast<Window*>(glfwGetWindowUserPointer(window));
 	engineWindow->width = width;
 	engineWindow->height = height;
+
+	if (engineWindow->m_changeSizeEvent)
+		engineWindow->m_changeSizeEvent(engineWindow, width, height);
 }
 
+void Window::changeSizeEvent(EngineChangeSize event)
+{
+	m_changeSizeEvent = event;
+}
