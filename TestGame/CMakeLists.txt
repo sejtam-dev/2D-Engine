@@ -50,20 +50,26 @@ set_target_properties(TestGame
 
 add_custom_command(TARGET TestGame POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy_if_different
-        ${ROOT_DIR}/build/${CMAKE_BUILD_TYPE}/bin/Engine/Engine.dll
-        ${ROOT_DIR}/build/${CMAKE_BUILD_TYPE}/bin/TestGame/
+        $<TARGET_FILE_DIR:Engine>/Engine.dll
+        $<TARGET_FILE_DIR:TestGame>
+)
+
+add_custom_command(TARGET TestGame POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_directory
+        ${ROOT_DIR}/Engine/Resources/
+        $<TARGET_FILE_DIR:TestGame>/Resources
 )
 
 add_custom_command(TARGET TestGame POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy_if_different
-        ${ROOT_DIR}/build/${CMAKE_BUILD_TYPE}/bin/glfw/glfw3.dll
-        ${ROOT_DIR}/build/${CMAKE_BUILD_TYPE}/bin/TestGame/
+        $<TARGET_FILE_DIR:glfw>/glfw3.dll
+        $<TARGET_FILE_DIR:TestGame>
 )
 
 add_custom_command(TARGET TestGame POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy_if_different
-        ${ROOT_DIR}/build/${CMAKE_BUILD_TYPE}/bin/glew/glew-sharedd.dll
-        ${ROOT_DIR}/build/${CMAKE_BUILD_TYPE}/bin/TestGame/
+        $<TARGET_FILE_DIR:libglew_shared>/glew-sharedd.dll
+        $<TARGET_FILE_DIR:TestGame>
 )
 
 message("=")

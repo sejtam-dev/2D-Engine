@@ -17,31 +17,11 @@ void Engine::run()
 	loadContent();
 
 	Shader* vertexShader = new Shader(ShaderType::VERTEX);
-	vertexShader->loadFromString(
-		"#shader vertex"
-		"#version 420 core\n"
-		"\n"
-		"layout(location = 0) in vec4 position;\n"
-		"\n"
-		"void main()\n"
-		"{\n"
-		"	gl_Position = position;\n"
-		"}\n"
-	);
+	vertexShader->loadFromFile("Resources/shaders/DefaultVertexShader.shader");
 	vertexShader->createShader();
 
 	Shader* fragmentShader = new Shader(ShaderType::FRAGMENT);
-	fragmentShader->loadFromString(
-		"#shader fragment"
-		"#version 420 core\n"
-		"\n"
-		"layout(location = 0) in vec4 color;\n"
-		"\n"
-		"void main()\n"
-		"{\n"
-		"	color = vec4(1.0, 1.0, 1.0, 1.0);\n"
-		"}\n"
-	);
+	fragmentShader->loadFromFile("Resources/shaders/DefaultFragmentShader.shader");
 	fragmentShader->createShader();
 
 	Shader::linkShaders(vertexShader, fragmentShader);

@@ -51,6 +51,12 @@ set_target_properties(Engine
         ARCHIVE_OUTPUT_DIRECTORY ${ROOT_DIR}/build/${CMAKE_BUILD_TYPE}/lib/Engine
 )
 
+add_custom_command(TARGET Engine PRE_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_directory
+        ${ENGINE_ROOT_DIR}/Resources/
+        $<TARGET_FILE_DIR:Engine>/Resources/
+)
+
 message("=")
 message("====================")
 message("")

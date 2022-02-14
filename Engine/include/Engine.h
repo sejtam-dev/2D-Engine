@@ -4,6 +4,8 @@
 #include "Window.h"
 #include "Shader.h"
 
+#include <thread>
+
 class ENGINE_API Engine
 {
 private:

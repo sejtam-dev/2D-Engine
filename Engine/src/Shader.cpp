@@ -62,7 +62,18 @@ unsigned int Shader::createShader()
 	glShaderSource(id, 1, &shader, nullptr);
 	glCompileShader(id);
 
-	// TODO: Handle errors
+	int result;
+	glGetShaderiv(id, GL_COMPILE_STATUS, &result);
+	if(result == GL_FALSE)
+	{
+		int length;
+		glGetShaderiv(id, GL_INFO_LOG_LENGTH, &length);
+		char* message = static_cast<char*>(_malloca(length * sizeof(char)));
+		glGetShaderInfoLog(id, length, &length, message);
+
+		std::cerr << "Failed to compile " << (type == ShaderType::VERTEX ? "vertex" : "fragment") << " shader!" << std::endl;
+		std::cerr << message << std::endl;
+	}
 
 	return id;
 }

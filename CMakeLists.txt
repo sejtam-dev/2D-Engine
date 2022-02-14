@@ -101,7 +101,7 @@ message("=")
 
 add_subdirectory(${GLEW_ROOT_DIR})
 
-if(TARGET libglew_static)
+if(TARGET libglew_shared)
     set(GLEW_INCLUDE_DIR ${GLEW_ROOT_DIR}/include)
 
     message("= Status: Found")
