@@ -15,6 +15,10 @@ private:
 	float m_fpsLastTime = 0.0f;
 	int m_frames = 0;
 
+protected:
+	Shader* vertexShader;
+	Shader* fragmentShader;
+
 public:
 	Window* window;
 
@@ -36,6 +40,8 @@ protected:
 
 	virtual void update() {}
 	virtual void draw() {}
+
+	void createShaders();
 
 private:
 	static void initGLEW()

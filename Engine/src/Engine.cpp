@@ -16,14 +16,7 @@ void Engine::run()
 	init();
 	loadContent();
 
-	Shader* vertexShader = new Shader(ShaderType::VERTEX);
-	vertexShader->loadFromFile("Resources/shaders/DefaultVertexShader.shader");
-	vertexShader->createShader();
-
-	Shader* fragmentShader = new Shader(ShaderType::FRAGMENT);
-	fragmentShader->loadFromFile("Resources/shaders/DefaultFragmentShader.shader");
-	fragmentShader->createShader();
-
+	createShaders();
 	Shader::linkShaders(vertexShader, fragmentShader);
 
 	while (!window->shouldClose())
@@ -76,6 +69,17 @@ void Engine::calculateFPS()
 		m_frames = 0;
 		m_fpsLastTime = m_currentTime;
 	}
+}
+
+void Engine::createShaders()
+{
+	vertexShader = new Shader(ShaderType::VERTEX);
+	vertexShader->loadFromFile("Resources/shaders/DefaultVertexShader.shader");
+	vertexShader->createShader();
+
+	fragmentShader = new Shader(ShaderType::FRAGMENT);
+	fragmentShader->loadFromFile("Resources/shaders/DefaultFragmentShader.shader");
+	fragmentShader->createShader();
 }
 
 
