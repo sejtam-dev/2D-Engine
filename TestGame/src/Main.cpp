@@ -36,7 +36,7 @@ void Game::update()
 void Game::draw()
 {
 	glBegin(GL_TRIANGLES);
-
+	
 	glColor3f(0, 0, 1);
 	glVertex2f(-0.5, -0.5);
 	glVertex2f(0, 0);
@@ -65,5 +65,5 @@ void Game::draw()
 
 void Game::changeSize(Window* window, int width, int height)
 {
-
+	std::cout << "Size changed: " << width << "x" << height << std::endl;
 }

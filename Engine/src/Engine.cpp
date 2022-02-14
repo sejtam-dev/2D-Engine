@@ -16,6 +16,36 @@ void Engine::run()
 	init();
 	loadContent();
 
+	Shader* vertexShader = new Shader(ShaderType::VERTEX);
+	vertexShader->loadFromString(
+		"#shader vertex"
+		"#version 420 core\n"
+		"\n"
+		"layout(location = 0) in vec4 position;\n"
+		"\n"
+		"void main()\n"
+		"{\n"
+		"	gl_Position = position;\n"
+		"}\n"
+	);
+	vertexShader->createShader();
+
+	Shader* fragmentShader = new Shader(ShaderType::FRAGMENT);
+	fragmentShader->loadFromString(
+		"#shader fragment"
+		"#version 420 core\n"
+		"\n"
+		"layout(location = 0) in vec4 color;\n"
+		"\n"
+		"void main()\n"
+		"{\n"
+		"	color = vec4(1.0, 1.0, 1.0, 1.0);\n"
+		"}\n"
+	);
+	fragmentShader->createShader();
+
+	Shader::linkShaders(vertexShader, fragmentShader);
+
 	while (!window->shouldClose())
 	{
 		glClearColor(0.07f, 0.13f, 0.17f, 1.0f);

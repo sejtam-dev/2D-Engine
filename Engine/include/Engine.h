@@ -2,8 +2,7 @@
 
 #include "Static.h"
 #include "Window.h"
-
-#include <sstream>
+#include "Shader.h"
 
 class ENGINE_API Engine
 {
