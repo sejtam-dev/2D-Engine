@@ -17,12 +17,11 @@ void Engine::Run()
 	LoadContent();
 
 	CreateShaders();
-	Shader::LinkShaders(m_vertexShader.get(), m_fragmentShader.get());
 
 	while (!window->ShouldClose())
 	{
-		glClearColor(0.07f, 0.13f, 0.17f, 1.0f);
-		glClear(GL_COLOR_BUFFER_BIT);
+		GLCall(glClearColor(0.07f, 0.13f, 0.17f, 1.0f));
+		GLCall(glClear(GL_COLOR_BUFFER_BIT));
 
 		UpdateDeltaTime();
 		CalculateFPS();
@@ -30,14 +29,14 @@ void Engine::Run()
 #if _DEBUG
 		std::stringstream windowTitle;
 		windowTitle << window->title << " [" << fps << " FPS]";
-		glfwSetWindowTitle(window->GLFWWindow(), windowTitle.str().c_str());
+		GLCall(glfwSetWindowTitle(window->GLFWWindow(), windowTitle.str().c_str()));
 #endif
 
 		Update();
 		Draw();
 
-		glfwSwapBuffers(window->GLFWWindow());
-		glfwPollEvents();
+		GLCall(glfwSwapBuffers(window->GLFWWindow()));
+		GLCall(glfwPollEvents());
 	}
 
 	Shader::UnlinkShaders();
