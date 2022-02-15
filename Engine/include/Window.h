@@ -23,28 +23,28 @@ public:
 	Window(int width, int height, std::string title);
 	~Window();
 
-	void createWindow();
-	GLFWwindow* glfwWindow() const
+	void CreateWindow();
+	GLFWwindow* GLFWWindow() const
 	{
 		return m_window;
 	}
-	bool shouldClose() const
+	bool ShouldClose() const
 	{
 		return glfwWindowShouldClose(m_window);
 	}
 
-	void changeSizeEvent(EngineChangeSize event);
-	void changeSize(int width, int height);
+	void ChangeSizeEvent(EngineChangeSize event);
+	void ChangeSize(int width, int height);
 
-	int getWidth() const
+	int GetWidth() const
 	{
 		return width;
 	}
-	int getHeight() const
+	int GetHeight() const
 	{
 		return width;
 	}
 
 private:
-	static void framebufferResizeCallback(GLFWwindow* window, int width, int height);
+	static void FrameBufferResizeCallback(GLFWwindow* window, int width, int height);
 };

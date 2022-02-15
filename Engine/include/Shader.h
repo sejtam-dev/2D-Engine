@@ -10,20 +10,29 @@ enum class ENGINE_API ShaderType
 class ENGINE_API Shader
 {
 private:
-	static unsigned int program;
+	static GLuint program;
+	static GLuint linkedVertexShader;
+	static GLuint linkedFragmentShader;
 	
 	std::string m_shaderString;
 
 public:
-	unsigned int id = 0;
+	GLuint id = 0;
 	ShaderType type = ShaderType::NONE;
 
 	Shader(ShaderType type);
 	~Shader();
 
-	bool loadFromFile(const std::string& path);
-	void loadFromString(const std::string& string);
+	bool LoadFromFile(const std::string& path);
+	void LoadFromString(const std::string& string);
 
-	unsigned int createShader();
-	static unsigned int linkShaders(const Shader* vertex, const Shader* fragment);
+	GLuint CreateShader();
+
+	static void DeleteProgram();
+
+	static GLuint LinkShaders(const Shader* vertex, const Shader* fragment);
+	static GLuint UnlinkShader(ShaderType type);
+	static void UnlinkShaders();
+
+	static void SetUniform4f(const GLchar* key, GLfloat value1, GLfloat value2, GLfloat value3, GLfloat value4);
 };

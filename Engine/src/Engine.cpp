@@ -5,56 +5,59 @@ Engine::Engine()
 	window = new Window(800, 600, "Engine");
 }
 
-void Engine::run()
+void Engine::Run()
 {
 	// Create window
-	window->createWindow();
+	window->CreateWindow();
 
 	// Init GLEW
-	initGLEW();
+	InitGLEW();
 
-	init();
-	loadContent();
+	Init();
+	LoadContent();
 
-	createShaders();
-	Shader::linkShaders(vertexShader, fragmentShader);
+	CreateShaders();
+	Shader::LinkShaders(m_vertexShader.get(), m_fragmentShader.get());
 
-	while (!window->shouldClose())
+	while (!window->ShouldClose())
 	{
 		glClearColor(0.07f, 0.13f, 0.17f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
 
-		updateDeltaTime();
-		calculateFPS();
+		UpdateDeltaTime();
+		CalculateFPS();
 
 #if _DEBUG
 		std::stringstream windowTitle;
 		windowTitle << window->title << " [" << fps << " FPS]";
-		glfwSetWindowTitle(window->glfwWindow(), windowTitle.str().c_str());
+		glfwSetWindowTitle(window->GLFWWindow(), windowTitle.str().c_str());
 #endif
 
-		update();
-		draw();
+		Update();
+		Draw();
 
-		glfwSwapBuffers(window->glfwWindow());
+		glfwSwapBuffers(window->GLFWWindow());
 		glfwPollEvents();
 	}
 
-	unloadContent();
+	Shader::UnlinkShaders();
+	Shader::DeleteProgram();
+
+	UnloadContent();
 
 	// Delete window
 	glfwTerminate();
 	delete window;
 }
 
-void Engine::updateDeltaTime()
+void Engine::UpdateDeltaTime()
 {
 	m_currentTime = static_cast<float>(glfwGetTime());
 	deltaTime = m_currentTime - m_lastTime;
 	m_lastTime = m_currentTime;
 }
 
-void Engine::calculateFPS()
+void Engine::CalculateFPS()
 {
 	if (m_fpsLastTime == 0.0f)
 		m_fpsLastTime = m_currentTime;
@@ -71,15 +74,15 @@ void Engine::calculateFPS()
 	}
 }
 
-void Engine::createShaders()
+void Engine::CreateShaders()
 {
-	vertexShader = new Shader(ShaderType::VERTEX);
-	vertexShader->loadFromFile("Resources/shaders/DefaultVertexShader.shader");
-	vertexShader->createShader();
+	m_vertexShader = std::make_unique<Shader>(Shader(ShaderType::VERTEX));
+	m_vertexShader->LoadFromFile("Resources/shaders/DefaultVertexShader.shader");
+	m_vertexShader->CreateShader();
 
-	fragmentShader = new Shader(ShaderType::FRAGMENT);
-	fragmentShader->loadFromFile("Resources/shaders/DefaultFragmentShader.shader");
-	fragmentShader->createShader();
+	m_fragmentShader = std::make_unique<Shader>(Shader(ShaderType::FRAGMENT));
+	m_fragmentShader->LoadFromFile("Resources/shaders/DefaultFragmentShader.shader");
+	m_fragmentShader->CreateShader();
 }
 
 

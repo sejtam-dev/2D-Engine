@@ -13,7 +13,7 @@ Window::~Window()
 	}
 }
 
-void Window::createWindow()
+void Window::CreateWindow()
 {
 	glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE);
 
@@ -26,11 +26,11 @@ void Window::createWindow()
 	glfwMakeContextCurrent(m_window);
 
 	glfwSetWindowUserPointer(m_window, this);
-	glfwSetFramebufferSizeCallback(m_window, framebufferResizeCallback);
+	glfwSetFramebufferSizeCallback(m_window, FrameBufferResizeCallback);
 }
 
-void Window::framebufferResizeCallback(GLFWwindow* window, int width, int height) {
-	auto engineWindow = reinterpret_cast<Window*>(glfwGetWindowUserPointer(window));
+void Window::FrameBufferResizeCallback(GLFWwindow* window, const int width, const int height) {
+	const auto engineWindow = static_cast<Window*>(glfwGetWindowUserPointer(window));
 	engineWindow->width = width;
 	engineWindow->height = height;
 
@@ -38,12 +38,12 @@ void Window::framebufferResizeCallback(GLFWwindow* window, int width, int height
 		engineWindow->m_changeSizeEvent(engineWindow, width, height);
 }
 
-void Window::changeSizeEvent(EngineChangeSize event)
+void Window::ChangeSizeEvent(EngineChangeSize event)
 {
 	m_changeSizeEvent = event;
 }
 
-void Window::changeSize(int width, int height)
+void Window::ChangeSize(int width, int height)
 {
 	this->width = width;
 	this->height = height;

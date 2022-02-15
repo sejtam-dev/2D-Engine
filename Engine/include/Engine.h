@@ -16,8 +16,8 @@ private:
 	int m_frames = 0;
 
 protected:
-	Shader* vertexShader;
-	Shader* fragmentShader;
+	std::unique_ptr<Shader> m_vertexShader;
+	std::unique_ptr<Shader> m_fragmentShader;
 
 public:
 	Window* window;
@@ -30,21 +30,21 @@ public:
 
 	Engine();
 
-	void run();
+	void Run();
 
 protected:
-	virtual void init() {}
+	virtual void Init() {}
 
-	virtual void loadContent() {}
-	virtual void unloadContent() {}
+	virtual void LoadContent() {}
+	virtual void UnloadContent() {}
 
-	virtual void update() {}
-	virtual void draw() {}
+	virtual void Update() {}
+	virtual void Draw() {}
 
-	void createShaders();
+	void CreateShaders();
 
 private:
-	static void initGLEW()
+	static void InitGLEW()
 	{
 		if (glewInit() != GLEW_OK)
 		{
@@ -52,6 +52,6 @@ private:
 		}
 	}
 
-	void updateDeltaTime();
-	void calculateFPS();
+	void UpdateDeltaTime();
+	void CalculateFPS();
 };

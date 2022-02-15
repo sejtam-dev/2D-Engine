@@ -8,14 +8,14 @@ public:
 	Game();
 
 protected:
-	void init() override;
+	void Init() override;
 
-	void loadContent() override;
-	void unloadContent() override;
+	void LoadContent() override;
+	void UnloadContent() override;
 
-	void update() override;
-	void draw() override;
+	void Update() override;
+	void Draw() override;
 
 private:
-	static void changeSize(Window* window, int width, int height);
+	static void ChangeSize(Window* window, int width, int height);
 };
