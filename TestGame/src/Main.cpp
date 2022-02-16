@@ -68,5 +68,5 @@ void Game::Draw()
 
 void Game::ChangeSize(Window* window, int width, int height)
 {
-	std::cout << "Size changed: " << width << "x" << height << std::endl;
+	LOG("Size changed: " << width << "x" << height);
 }

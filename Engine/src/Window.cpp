@@ -20,7 +20,7 @@ void Window::CreateWindow()
 	m_window = glfwCreateWindow(width, height, title.c_str(), nullptr, nullptr);
 	if(m_window == nullptr)
 	{
-		std::cerr << "GLFW window creation failed!" << std::endl;
+		ERROR("GLFW window creation failed!");
 	}
 
 	glfwMakeContextCurrent(m_window);
