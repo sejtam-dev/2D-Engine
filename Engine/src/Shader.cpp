@@ -1,6 +1,6 @@
 #include "Shader.h"
 
-Shader::Shader(ShaderType type) : type(type) { }
+Shader::Shader(ShaderType type = ShaderType::NONE) : type(type) { }
 Shader::~Shader()
 {
 	glDeleteShader(id);
@@ -96,11 +96,15 @@ GLuint Shader::LinkShaders(const Shader* vertex, const Shader* fragment)
 		program = GLCallReturn(glCreateProgram());
 
 	if (linkedVertexShader != vertex->id) {
+		linkedVertexShader = vertex->id;
+
 		const GLuint vertexShader = vertex->id;
 		GLCall(glAttachShader(program, vertexShader));
 	}
 
 	if (linkedFragmentShader != fragment->id) {
+		linkedFragmentShader = fragment->id;
+
 		const GLuint fragmentShader = fragment->id;
 		GLCall(glAttachShader(program, fragmentShader));
 	}
@@ -152,10 +156,68 @@ void Shader::UnlinkShaders()
 	UnlinkShader(ShaderType::FRAGMENT);
 }
 
-void Shader::SetUniform4f(const GLchar* key, const GLfloat value1, const GLfloat value2, const GLfloat value3, const GLfloat value4)
+GLint Shader::getUniform(const std::string& name) {
+	if (m_UniformLocations.find(name) != m_UniformLocations.end())
+		return m_UniformLocations[name];
+
+	const GLint uniformLocation = GLCallReturn(glGetUniformLocation(program, name.c_str()));
+	m_UniformLocations[name] = uniformLocation;
+	return uniformLocation;
+}
+
+void Shader::SetUniform1f(const std::string& name, const float value1)
 {
-	const GLint uniformLocation = GLCallReturn(glGetUniformLocation(program, key));
-	glUniform4f(uniformLocation, value1, value2, value3, value4);
+	const GLint uniform = getUniform(name);
+	if (uniform == -1)
+		return;
+
+	glUniform1f(uniform, value1);
+}
+void Shader::SetUniform2f(const std::string& name, glm::vec2& value)
+{
+	const GLint uniform = getUniform(name);
+	if (uniform == -1)
+		return;
+
+	glUniform2f(uniform, value.x, value.y);
+}
+void Shader::SetUniform3f(const std::string& name, glm::vec3& value)
+{
+	const GLint uniform = getUniform(name);
+	if (uniform == -1)
+		return;
+
+	glUniform3f(uniform, value.x, value.y, value.z);
+}
+void Shader::SetUniform4f(const std::string& name, glm::vec4& value)
+{
+	const GLint uniform = getUniform(name);
+	if (uniform == -1)
+		return;
+
+	glUniform4f(uniform, value.x, value.y, value.z, value.w);
+}
+
+void Shader::SetUniformMatrix2fv(const std::string& name, glm::mat2& value) {
+	const GLint uniform = getUniform(name);
+	if (uniform == -1)
+		return;
+
+	glUniformMatrix2fv(uniform, 1, false, &value[0][0]);
+}
+void Shader::SetUniformMatrix3fv(const std::string& name, glm::mat3& value) {
+	const GLint uniform = getUniform(name);
+	if (uniform == -1)
+		return;
+
+	glUniformMatrix3fv(uniform, 1, false, &value[0][0]);
+}
+void Shader::SetUniformMatrix4fv(const std::string& name, glm::mat4& value) {
+	const GLint uniform = getUniform(name);
+	if (uniform == -1)
+		return;
+
+	glUniformMatrix4fv(uniform, 1, false, &value[0][0]);
 }
 
 GLuint Shader::program = 0;

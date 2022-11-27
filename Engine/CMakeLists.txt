@@ -36,6 +36,10 @@ list(APPEND ENGINE_LIBRARIES glfw)
 list(APPEND ENGINE_INCLUDE_DIRS ${GLEW_INCLUDE_DIR})
 list(APPEND ENGINE_LIBRARIES libglew_shared)
 
+# GL¨M
+list(APPEND ENGINE_INCLUDE_DIRS ${GLM_INCLUDE_DIR})
+list(APPEND ENGINE_LIBRARIES glm_shared)
+
 # Create Library
 include_directories(${ENGINE_INCLUDES_DIR})
 add_library(Engine SHARED ${ENGINE_SOURCES})

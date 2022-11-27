@@ -50,6 +50,8 @@ private:
 		{
 			std::cerr << "GLEW initialization failed." << std::endl;
 		}
+
+		printf("OpenGL version supported by this platform (%s): \n", glGetString(GL_VERSION));
 	}
 
 	void UpdateDeltaTime();

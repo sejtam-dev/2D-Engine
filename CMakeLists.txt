@@ -116,6 +116,31 @@ set_target_properties(libglew_shared
         ARCHIVE_OUTPUT_DIRECTORY ${ROOT_DIR}/build/${CMAKE_BUILD_TYPE}/lib/glew
 )
 
+# GLM
+message("== GLM")
+message("=")
+
+set(GLM_ROOT_DIR ${ROOT_DIR}/3rdparty/glm)
+message("= Root Directory: ${GLM_ROOT_DIR}")
+message("=")
+
+add_subdirectory(${GLM_ROOT_DIR})
+
+if(TARGET glm_shared)
+    set(GLM_INCLUDE_DIR ${GLM_ROOT_DIR}/glm)
+
+    message("= Status: Found")
+else()
+    message("= Status: Not Found")
+endif()
+
+set_target_properties(glm_shared
+    PROPERTIES
+        RUNTIME_OUTPUT_DIRECTORY ${ROOT_DIR}/build/${CMAKE_BUILD_TYPE}/bin/glm
+        LIBRARY_OUTPUT_DIRECTORY ${ROOT_DIR}/build/${CMAKE_BUILD_TYPE}/lib/glm
+        ARCHIVE_OUTPUT_DIRECTORY ${ROOT_DIR}/build/${CMAKE_BUILD_TYPE}/lib/glm
+)
+
 message("=")
 message("====================")
 message("")
