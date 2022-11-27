@@ -73,8 +73,8 @@ GLuint Shader::CreateShader()
 		char* message = static_cast<char*>(alloca(length * sizeof(char)));
 		GLCall(glGetShaderInfoLog(id, length, &length, message));
 
-		std::cerr << "Failed to compile " << (type == ShaderType::VERTEX ? "vertex" : "fragment") << " shader!" << std::endl;
-		std::cerr << message << std::endl;
+		ERROR("Failed to compile " << (type == ShaderType::VERTEX ? "vertex" : "fragment") << " shader!");
+		ERROR(message);
 	}
 
 	return id;

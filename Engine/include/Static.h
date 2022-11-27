@@ -21,15 +21,27 @@
 #define ENGINE_API __declspec(dllimport)
 #endif
 
+#if _WIN32
+#define __FILENAME__ (strrchr(__FILE__, '\\') ? strrchr(__FILE__, '\\ ') + 1 : __FILE__)
+#else
+#define __FILENAME__ (strrchr(__FILE__, '/') ? strrchr(__FILE__, '/ ') + 1 : __FILE__)
+#endif
+
+#define LOG(message) \
+    std::cout << "(" << __FILENAME__ << " | " << __LINE__ << "): " << message << std::endl 
+
+#define ERROR(message) \
+    std::cerr << "(" << __FILENAME__ << " | " << __LINE__ << "): " << message << std::endl 
+
 #ifdef _DEBUG
 #define GLCall( x ) \
      GLClearErrors(); \
      x; \
-     if ( GLLogCall( #x, __FILE__, __LINE__) ) __debugbreak();
+     if ( GLLogCall( #x) ) __debugbreak();
 #define GLCallReturn( x ) [&]() { \
      GLClearErrors(); \
      auto retVal = x; \
-     if ( GLLogCall( #x, __FILE__, __LINE__) ) __debugbreak(); \
+     if ( GLLogCall( #x) ) __debugbreak(); \
      return retVal; \
    }()
 #else
@@ -42,7 +54,7 @@ static void GLClearErrors()
 	while (glGetError() != GL_NO_ERROR);
 }
 
-static bool GLLogCall(const char* function, const char* file, const int line)
+static bool GLLogCall(const char* function)
 {
 	while(const GLenum errorCode = glGetError())
 	{
@@ -58,7 +70,8 @@ static bool GLLogCall(const char* function, const char* file, const int line)
         case GL_INVALID_FRAMEBUFFER_OPERATION: error = "INVALID_FRAMEBUFFER_OPERATION"; break;
         }
 
-		std::cerr << "[OpenGL Error] (" << error << ") => " << function << " | " << file << " | " << line << std::endl;
+		ERROR("[OpenGL Error] (" << error << ") => " << function);
+
 		return true;
 	}
 
