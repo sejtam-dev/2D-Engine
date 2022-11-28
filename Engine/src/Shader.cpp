@@ -146,6 +146,7 @@ GLuint Shader::UnlinkShader(ShaderType type)
 		return cachedShader;
 
 	case ShaderType::NONE:
+	default:
 		return 0;
 	}
 }
@@ -223,3 +224,4 @@ void Shader::SetUniformMatrix4fv(const std::string& name, glm::mat4& value) {
 GLuint Shader::program = 0;
 GLuint Shader::linkedVertexShader = 0;
 GLuint Shader::linkedFragmentShader = 0;
+std::map<std::string, GLint> Shader::m_UniformLocations = {};

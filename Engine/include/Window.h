@@ -2,7 +2,7 @@
 
 #include "Static.h"
 
-class ENGINE_API Window
+class Window
 {
 public:
 	typedef void(*EngineChangeSize)(Window* window, int width, int height);

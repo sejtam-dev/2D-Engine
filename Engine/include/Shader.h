@@ -2,8 +2,6 @@
 
 #include "Static.h"
 
-#include <unordered_map>
-
 #include "glm/vec2.hpp"
 #include "glm/vec3.hpp"
 #include "glm/vec4.hpp"
@@ -12,12 +10,14 @@
 #include "glm/mat3x3.hpp"
 #include "glm/mat4x4.hpp"
 
-enum class ENGINE_API ShaderType
+#include <map>
+
+enum class ShaderType
 {
 	NONE = -1, VERTEX = 0, FRAGMENT = 1
 };
 
-class ENGINE_API Shader
+class Shader
 {
 private:
 	static GLuint program;
@@ -26,7 +26,7 @@ private:
 	
 	std::string m_shaderString;
 
-	static std::unordered_map<std::string, GLint> m_UniformLocations;
+	static std::map<std::string, int> m_UniformLocations;
 	static GLint getUniform(const std::string& name);
 
 public:
@@ -41,7 +41,7 @@ public:
 
 	GLuint CreateShader();
 
-	void DeleteProgram();
+	static void DeleteProgram();
 
 	static GLuint LinkShaders(const Shader* vertex, const Shader* fragment);
 	static GLuint UnlinkShader(ShaderType type);

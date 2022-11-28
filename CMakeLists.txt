@@ -13,6 +13,8 @@ message("=")
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
+
 ## Create project
 message("= C++ Version: ${CMAKE_CXX_STANDARD}")
 message("= C++ Compiler: ${CMAKE_CXX_COMPILER_ID}")
@@ -120,6 +122,8 @@ set_target_properties(libglew_shared
 message("== GLM")
 message("=")
 
+set(BUILD_SHARED_LIBS on)
+
 set(GLM_ROOT_DIR ${ROOT_DIR}/3rdparty/glm)
 message("= Root Directory: ${GLM_ROOT_DIR}")
 message("=")
@@ -139,6 +143,59 @@ set_target_properties(glm_shared
         RUNTIME_OUTPUT_DIRECTORY ${ROOT_DIR}/build/${CMAKE_BUILD_TYPE}/bin/glm
         LIBRARY_OUTPUT_DIRECTORY ${ROOT_DIR}/build/${CMAKE_BUILD_TYPE}/lib/glm
         ARCHIVE_OUTPUT_DIRECTORY ${ROOT_DIR}/build/${CMAKE_BUILD_TYPE}/lib/glm
+)
+
+# ImGUI
+message("== ImGUI")
+message("=")
+
+set(IMGUI_ROOT_DIR ${ROOT_DIR}/3rdparty/imgui)
+message("= Root Directory: ${IMGUI_ROOT_DIR}")
+message("=")
+
+# Create library
+add_library(imgui_shared SHARED)
+
+# Set tart sources
+target_sources(imgui_shared 
+    PRIVATE
+        ${IMGUI_ROOT_DIR}/imgui.cpp    
+        ${IMGUI_ROOT_DIR}/imgui_draw.cpp
+        ${IMGUI_ROOT_DIR}/imgui_tables.cpp
+        ${IMGUI_ROOT_DIR}/imgui_widgets.cpp
+        ${IMGUI_ROOT_DIR}/backends/imgui_impl_glfw.cpp
+        ${IMGUI_ROOT_DIR}/backends/imgui_impl_opengl3.cpp
+)
+
+# Include directories
+target_include_directories(imgui_shared
+    PUBLIC 
+        ${IMGUI_ROOT_DIR}
+        ${IMGUI_ROOT_DIR}/backends
+    PRIVATE 
+        ${GLFW_ROOT_DIR}/include
+)
+
+# Link libraries
+target_link_libraries(imgui_shared 
+    PRIVATE glfw
+)
+
+if(TARGET imgui_shared)
+    set(IMGUI_INCLUDE_DIR)
+    list(APPEND IMGUI_INCLUDE_DIR ${IMGUI_ROOT_DIR}) 
+    list(APPEND IMGUI_INCLUDE_DIR ${IMGUI_ROOT_DIR}/backends)   
+
+    message("= Status: Found")
+else()
+    message("= Status: Not Found")
+endif()
+
+set_target_properties(imgui_shared
+    PROPERTIES
+        RUNTIME_OUTPUT_DIRECTORY ${ROOT_DIR}/build/${CMAKE_BUILD_TYPE}/bin/imgui
+        LIBRARY_OUTPUT_DIRECTORY ${ROOT_DIR}/build/${CMAKE_BUILD_TYPE}/lib/imgui
+        ARCHIVE_OUTPUT_DIRECTORY ${ROOT_DIR}/build/${CMAKE_BUILD_TYPE}/lib/imgui
 )
 
 message("=")

@@ -76,7 +76,7 @@ void Game::Update()
 void Game::Draw()
 {
 	Shader::LinkShaders(m_vertexShader.get(), m_fragmentShader.get());
-	Shader::SetUniform4f("u_Color", r, 0.4f, 0.4f, 1.0f);
+	Shader::SetUniform4f("u_Color", glm::vec4(r, 0.4f, 0.4f, 1.0f));
 	GLCall(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr));
 	Shader::UnlinkShaders();
 }
