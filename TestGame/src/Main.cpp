@@ -20,17 +20,23 @@ void Game::Init()
 {
 	window->ChangeSizeEvent(ChangeSize);
 
-	float position[6] = {
+	float position[12] = {
 		-0.5f, -0.5f,
 		 0.0f,  0.5f,
-		 0.5f, -0.5f
+		 0.5f, -0.5f,
+        0.0f, -0.5f,
+         0.5f,  1.0f,
+        0.5f, -0.5f
 	};
 
-	GLuint bufferId;
-	GLCall(glGenBuffers(1, &bufferId));
-	GLCall(glBindBuffer(GL_ARRAY_BUFFER, bufferId));
-	GLCall(glBufferData(GL_ARRAY_BUFFER, 6 * sizeof(float), position, GL_STATIC_DRAW));
-    GLCall(glBindBuffer(GL_ARRAY_BUFFER, 0));
+    GLuint vao;
+    GLCall(glGenVertexArrays(1, &vao));
+    GLCall(glBindVertexArray(vao));
+
+	GLuint vbo;
+	GLCall(glGenBuffers(1, &vbo));
+	GLCall(glBindBuffer(GL_ARRAY_BUFFER, vbo));
+	GLCall(glBufferData(GL_ARRAY_BUFFER, 12 * sizeof(float), position, GL_STATIC_DRAW));
 
 	GLCall(glEnableVertexAttribArray(0));
 	GLCall(glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 2, nullptr));
@@ -61,12 +67,11 @@ void Game::Update()
 
 void Game::Draw()
 {
-	Shader::LinkShaders(m_vertexShader.get(), m_fragmentShader.get());
-
 	Shader::SetUniform4f("u_Color", r, 0.4f, 0.4f, 1.0f);
 	GLCall(glDrawArrays(GL_TRIANGLES, 0, 3));
 
-	Shader::UnlinkShaders();
+    Shader::SetUniform4f("u_Color", 0.4f, r, 0.4f, 1.0f);
+    GLCall(glDrawArrays(GL_TRIANGLES, 3, 3));
 }
 
 void Game::ChangeSize(Window* window, int width, int height)

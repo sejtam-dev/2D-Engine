@@ -17,6 +17,7 @@ void Engine::Run()
 	LoadContent();
 
 	CreateShaders();
+    Shader::LinkShaders(m_vertexShader.get(), m_fragmentShader.get());
 
 	while (!window->ShouldClose())
 	{
