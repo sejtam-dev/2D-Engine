@@ -64,13 +64,13 @@ GLuint Shader::CreateShader()
 	GLCall(glShaderSource(id, 1, &shader, nullptr));
 	GLCall(glCompileShader(id));
 
-	int result;
+	GLint result;
 	GLCall(glGetShaderiv(id, GL_COMPILE_STATUS, &result));
 	if(result == GL_FALSE)
 	{
-		int length;
+        GLint length;
 		GLCall(glGetShaderiv(id, GL_INFO_LOG_LENGTH, &length));
-		char* message = static_cast<char*>(alloca(length * sizeof(char)));
+        auto* message = static_cast<GLchar*>(alloca(length * sizeof(GLchar)));
 		GLCall(glGetShaderInfoLog(id, length, &length, message));
 
 		std::cerr << "Failed to compile " << (type == ShaderType::VERTEX ? "vertex" : "fragment") << " shader!" << std::endl;
@@ -97,7 +97,7 @@ GLuint Shader::LinkShaders(const Shader* vertex, const Shader* fragment)
 
 	if (linkedVertexShader != vertex->id) {
 		const GLuint vertexShader = vertex->id;
-		GLCall(glAttachShader(program, vertexShader));
+        GLCall(glAttachShader(program, vertexShader));
 	}
 
 	if (linkedFragmentShader != fragment->id) {
@@ -141,7 +141,7 @@ GLuint Shader::UnlinkShader(ShaderType type)
 
 		return cachedShader;
 
-	case ShaderType::NONE:
+	default:
 		return 0;
 	}
 }

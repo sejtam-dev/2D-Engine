@@ -2,7 +2,7 @@
 
 #include "Static.h"
 
-enum class ENGINE_API ShaderType
+enum class ShaderType
 {
 	NONE = -1, VERTEX = 0, FRAGMENT = 1
 };
@@ -35,4 +35,5 @@ public:
 	static void UnlinkShaders();
 
 	static void SetUniform4f(const GLchar* key, GLfloat value1, GLfloat value2, GLfloat value3, GLfloat value4);
+
 };

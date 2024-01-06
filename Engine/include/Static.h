@@ -21,7 +21,7 @@
 #define ENGINE_API __declspec(dllimport)
 #endif
 
-#ifdef _DEBUG
+#ifdef DEBUG
 #define GLCall( x ) \
      GLClearErrors(); \
      x; \
@@ -35,6 +35,9 @@
 #else
 #define GLCallV( x ) x
 #define GLCall( x ) x
+#define GLCallReturn( x ) [&]() {\
+         return x; \
+    }()
 #endif
 
 static void GLClearErrors()
@@ -46,7 +49,20 @@ static bool GLLogCall(const char* function, const char* file, const int line)
 {
 	while(const GLenum error = glGetError())
 	{
-		std::cerr << "[OpenGL Error] (" << error << ") => " << function << " | " << file << " | " << line << std::endl;
+        std::string errorStr;
+        switch (error)
+        {
+            case GL_INVALID_ENUM:                  errorStr = "INVALID_ENUM"; break;
+            case GL_INVALID_VALUE:                 errorStr = "INVALID_VALUE"; break;
+            case GL_INVALID_OPERATION:             errorStr = "INVALID_OPERATION"; break;
+            case GL_STACK_OVERFLOW:                errorStr = "STACK_OVERFLOW"; break;
+            case GL_STACK_UNDERFLOW:               errorStr = "STACK_UNDERFLOW"; break;
+            case GL_OUT_OF_MEMORY:                 errorStr = "OUT_OF_MEMORY"; break;
+            case GL_INVALID_FRAMEBUFFER_OPERATION: errorStr = "INVALID_FRAMEBUFFER_OPERATION"; break;
+            default:                               errorStr = "Undefined"; break;
+        }
+
+		std::cerr << "[OpenGL Error] (" << error << " | " << errorStr << ") => " << function << " | " << file << " | " << line << std::endl;
 		return true;
 	}
 

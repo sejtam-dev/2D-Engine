@@ -41,9 +41,10 @@ include_directories(${ENGINE_INCLUDES_DIR})
 add_library(Engine SHARED ${ENGINE_SOURCES})
 
 # Link Libraries
-target_include_directories(Engine PUBLIC ${ENGINE_INCLUDE_DIRS})
+target_include_directories(Engine PUBLIC ${ENGINE_INCLUDES_DIRS})
 target_link_libraries(Engine PUBLIC ${ENGINE_LIBRARIES})
 
+set_target_properties(Engine PROPERTIES PREFIX "")
 set_target_properties(Engine
     PROPERTIES
         RUNTIME_OUTPUT_DIRECTORY ${ROOT_DIR}/build/${CMAKE_BUILD_TYPE}/bin/Engine

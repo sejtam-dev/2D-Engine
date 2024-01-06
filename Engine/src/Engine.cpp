@@ -26,7 +26,7 @@ void Engine::Run()
 		UpdateDeltaTime();
 		CalculateFPS();
 
-#if _DEBUG
+#if DEBUG
 		std::stringstream windowTitle;
 		windowTitle << window->title << " [" << fps << " FPS]";
 		GLCall(glfwSetWindowTitle(window->GLFWWindow(), windowTitle.str().c_str()));
