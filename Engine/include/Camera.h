@@ -6,10 +6,6 @@
 
 class Camera : public Component {
 
-private:
-
-
-public:
 
 
 };
