@@ -19,6 +19,8 @@ void Engine::Run()
 	CreateShaders();
     Shader::LinkShaders(m_vertexShader.get(), m_fragmentShader.get());
 
+	InitImGUI();
+
 	while (!window->ShouldClose())
 	{
 		GLCall(glClearColor(0.07f, 0.13f, 0.17f, 1.0f));
@@ -34,7 +36,17 @@ void Engine::Run()
 #endif
 
 		Update();
+
+		ImGui_ImplOpenGL3_NewFrame();
+		ImGui_ImplGlfw_NewFrame();
+		ImGui::NewFrame();
+		
 		Draw();
+		DrawImGUI();
+
+		ImGui::EndFrame();
+		ImGui::Render();
+		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
 		GLCall(glfwSwapBuffers(window->GLFWWindow()));
 		GLCall(glfwPollEvents());
@@ -44,6 +56,8 @@ void Engine::Run()
 	Shader::DeleteProgram();
 
 	UnloadContent();
+
+	ImGuiTerminate();
 
 	// Delete window
 	glfwTerminate();
