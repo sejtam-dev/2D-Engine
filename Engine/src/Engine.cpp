@@ -17,6 +17,7 @@ void Engine::Run()
 	LoadContent();
 
 	CreateShaders();
+    Shader::LinkShaders(m_vertexShader.get(), m_fragmentShader.get());
 
 	InitImGUI();
 
@@ -28,7 +29,7 @@ void Engine::Run()
 		UpdateDeltaTime();
 		CalculateFPS();
 
-#if _DEBUG
+#if DEBUG
 		std::stringstream windowTitle;
 		windowTitle << window->title << " [" << fps << " FPS]";
 		GLCall(glfwSetWindowTitle(window->GLFWWindow(), windowTitle.str().c_str()));

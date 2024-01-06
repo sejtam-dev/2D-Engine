@@ -10,7 +10,7 @@ message("= Root Directory: ${ROOT_DIR}")
 message("=")
 
 # C++ Standarts
-set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
@@ -58,6 +58,12 @@ endif()
 message("= OS: ${PROJECT_OS}")
 message("=")
 
+if(${CMAKE_BUILD_TYPE} STREQUAL Debug)
+    add_definitions(-DDEBUG)
+else()
+    add_definitions(-DRELEASE)
+endif()
+
 ## Libraries
 message("=== Libraries ===")
 message("=")
@@ -84,6 +90,7 @@ else()
     message("= Status: Not Found")
 endif()
 
+set_target_properties(glfw PROPERTIES PREFIX "")
 set_target_properties(glfw
     PROPERTIES
         RUNTIME_OUTPUT_DIRECTORY ${ROOT_DIR}/build/${CMAKE_BUILD_TYPE}/bin/glfw
@@ -111,6 +118,7 @@ else()
     message("= Status: Not Found")
 endif()
 
+set_target_properties(libglew_shared PROPERTIES PREFIX "")
 set_target_properties(libglew_shared
     PROPERTIES
         RUNTIME_OUTPUT_DIRECTORY ${ROOT_DIR}/build/${CMAKE_BUILD_TYPE}/bin/glew
