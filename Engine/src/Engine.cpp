@@ -17,11 +17,12 @@ void Engine::Run()
 	LoadContent();
 
 	CreateShaders();
-    Shader::LinkShaders(m_vertexShader.get(), m_fragmentShader.get());
 
 #ifdef IMGUI_ENABLED
 	InitImGUI();
 #endif
+
+    m_targetFpsTime = static_cast<float>(glfwGetTime());
 
 	while (!window->ShouldClose())
 	{
@@ -31,11 +32,13 @@ void Engine::Run()
 		UpdateDeltaTime();
 		CalculateFPS();
 
+#ifdef DEBUG
         if(m_DebugDelay == 200) {
             std::stringstream windowTitle;
             windowTitle << window->title << " [" << fps << " FPS]";
             GLCall(glfwSetWindowTitle(window->GLFWWindow(), windowTitle.str().c_str()));
         }
+#endif
 
 		Update();
 
@@ -61,10 +64,18 @@ void Engine::Run()
         if(m_DebugDelay >= 255) {
             m_DebugDelay = 0;
         } else m_DebugDelay++;
+
+        HoldTargetFPS();
 	}
 
-	Shader::UnlinkShaders();
-	Shader::DeleteProgram();
+    for (auto const& pair: m_Shaders) {
+        Shader* shader = pair.second;
+
+        shader->DeleteProgram();
+        shader->DeleteShader();
+
+        delete shader;
+    }
 
 	UnloadContent();
 
@@ -103,13 +114,20 @@ void Engine::CalculateFPS()
 
 void Engine::CreateShaders()
 {
-	m_vertexShader = std::make_unique<Shader>(Shader(ShaderType::VERTEX));
-	m_vertexShader->LoadFromFile("Resources/shaders/DefaultVertexShader.shader");
-	m_vertexShader->CreateShader();
+    auto* defaultShader = new Shader(
+        "Resources/shaders/DefaultVertexShader.shader",
+        "Resources/shaders/DefaultFragmentShader.shader"
+    );
 
-	m_fragmentShader = std::make_unique<Shader>(Shader(ShaderType::FRAGMENT));
-	m_fragmentShader->LoadFromFile("Resources/shaders/DefaultFragmentShader.shader");
-	m_fragmentShader->CreateShader();
+	m_Shaders.emplace("default", defaultShader);
+    Shader::LinkShader(defaultShader);
+}
+
+void Engine::HoldTargetFPS()
+{
+    while(glfwGetTime() < m_targetFpsTime + 1.0f/TARGET_FPS);
+
+    m_targetFpsTime += 1.0f/TARGET_FPS;
 }
 
 

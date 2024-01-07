@@ -101,6 +101,7 @@ set_target_properties(glfw
     PROPERTIES
         PREFIX ""
         OUTPUT_NAME "glfw"
+        DEBUG_POSTFIX ""
         RUNTIME_OUTPUT_DIRECTORY ${ROOT_DIR}/build/${CMAKE_BUILD_TYPE}/bin/glfw
         LIBRARY_OUTPUT_DIRECTORY ${ROOT_DIR}/build/${CMAKE_BUILD_TYPE}/lib/glfw
         ARCHIVE_OUTPUT_DIRECTORY ${ROOT_DIR}/build/${CMAKE_BUILD_TYPE}/lib/glfw
@@ -130,6 +131,7 @@ set_target_properties(libglew_shared
     PROPERTIES
         PREFIX ""
         OUTPUT_NAME "glew"
+        DEBUG_POSTFIX ""
         RUNTIME_OUTPUT_DIRECTORY ${ROOT_DIR}/build/${CMAKE_BUILD_TYPE}/bin/glew
         LIBRARY_OUTPUT_DIRECTORY ${ROOT_DIR}/build/${CMAKE_BUILD_TYPE}/lib/glew
         ARCHIVE_OUTPUT_DIRECTORY ${ROOT_DIR}/build/${CMAKE_BUILD_TYPE}/lib/glew
@@ -159,6 +161,7 @@ set_target_properties(glm_shared
     PROPERTIES
         PREFIX ""
         OUTPUT_NAME "glm"
+        DEBUG_POSTFIX ""
         RUNTIME_OUTPUT_DIRECTORY ${ROOT_DIR}/build/${CMAKE_BUILD_TYPE}/bin/glm
         LIBRARY_OUTPUT_DIRECTORY ${ROOT_DIR}/build/${CMAKE_BUILD_TYPE}/lib/glm
         ARCHIVE_OUTPUT_DIRECTORY ${ROOT_DIR}/build/${CMAKE_BUILD_TYPE}/lib/glm
@@ -215,6 +218,7 @@ if(IMGUI_ENABLED)
         PROPERTIES
             PREFIX ""
             OUTPUT_NAME "imgui"
+            DEBUG_POSTFIX ""
             RUNTIME_OUTPUT_DIRECTORY ${ROOT_DIR}/build/${CMAKE_BUILD_TYPE}/bin/imgui
             LIBRARY_OUTPUT_DIRECTORY ${ROOT_DIR}/build/${CMAKE_BUILD_TYPE}/lib/imgui
             ARCHIVE_OUTPUT_DIRECTORY ${ROOT_DIR}/build/${CMAKE_BUILD_TYPE}/lib/imgui

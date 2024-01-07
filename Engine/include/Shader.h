@@ -14,45 +14,48 @@
 
 enum class ShaderType
 {
-	NONE = -1, VERTEX = 0, FRAGMENT = 1
+    VERTEX = 0, FRAGMENT = 1
 };
 
 class Shader
 {
 private:
-	static GLuint program;
-	static GLuint linkedVertexShader;
-	static GLuint linkedFragmentShader;
-	
-	std::string m_shaderString;
+	GLuint m_Program;
+	GLuint m_VertexShader;
+	GLuint m_FragmentShader;
 
-	static std::map<std::string, int> m_UniformLocations;
-	static GLint getUniform(const std::string& name);
+	std::map<std::string, int> m_UniformLocations;
+	GLint getUniform(const std::string& name);
+
+    static Shader* linkedShader;
 
 public:
-	GLuint id = 0;
-	ShaderType type = ShaderType::NONE;
-
-	Shader(ShaderType type);
+    Shader() = default;
+	Shader(const std::string& vertexPath, const std::string& fragmentPath);
 	~Shader();
 
-	bool LoadFromFile(const std::string& path);
-	void LoadFromString(const std::string& string);
+	GLuint CreateShader(const std::string& shaderString, ShaderType type);
+    GLuint CreateProgram();
 
-	GLuint CreateShader();
+    void DeleteShader() const;
+	void DeleteProgram() const;
 
-	static void DeleteProgram();
+    static Shader* GetLinkedShader() {
+        return linkedShader;
+    }
 
-	static GLuint LinkShaders(const Shader* vertex, const Shader* fragment);
-	static GLuint UnlinkShader(ShaderType type);
-	static void UnlinkShaders();
+	static void LinkShader(Shader* shader);
 
-	static void SetUniform1f(const std::string& name, float value1);
-	static void SetUniform2f(const std::string& name, const glm::vec2& value);
-	static void SetUniform3f(const std::string& name, const glm::vec3& value);
-	static void SetUniform4f(const std::string& name, const glm::vec4& value);
+	void SetUniform1f(const std::string& name, float value1);
+	void SetUniform2f(const std::string& name, const glm::vec2& value);
+	void SetUniform3f(const std::string& name, const glm::vec3& value);
+	void SetUniform4f(const std::string& name, const glm::vec4& value);
 
-	static void SetUniformMatrix2fv(const std::string& name, const glm::mat2& value);
-	static void SetUniformMatrix3fv(const std::string& name, const glm::mat3& value);
-	static void SetUniformMatrix4fv(const std::string& name, const glm::mat4& value);
+	void SetUniformMatrix2fv(const std::string& name, const glm::mat2& value);
+	void SetUniformMatrix3fv(const std::string& name, const glm::mat3& value);
+	void SetUniformMatrix4fv(const std::string& name, const glm::mat4& value);
+
+private:
+    static std::string LoadFromFile(const std::string& path);
+
 };

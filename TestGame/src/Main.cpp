@@ -1,7 +1,7 @@
 #include "Main.h"
 
 float r = 0;
-float value = 0.001f;
+float value = 0.5f;
 
 int main()
 {
@@ -62,20 +62,25 @@ void Game::UnloadContent()
 
 void Game::Update()
 {
-	//std::cout << deltaTime << std::endl;
 	r += value;
-	if (r > 100) {
-		value = -10.0f * deltaTime;
+	if (r > 1) {
+		value = -0.5f * deltaTime;
 	}
 	else if(r < 0)
 	{
-		value = 10.0f * deltaTime;
+		value = 0.5f * deltaTime;
 	}
+
+    std::cout << deltaTime << ", " << r << std::endl;
 }
 
 void Game::Draw()
 {
-	Shader::SetUniform4f("u_Color", glm::vec4(r / 100, 0.4f, 0.4f, 1.0f));
+    Shader::LinkShader(m_Shaders["default"]);
+
+    Shader* shader = Shader::GetLinkedShader();
+    shader->SetUniform4f("u_Color", glm::vec4(r, 0.4f, 0.4f, 1.0f));
+
 	GLCall(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr));
 }
 

@@ -11,12 +11,14 @@
 #endif
 
 #include <thread>
+#include <vector>
 
 class Engine
 {
 private:
 	float m_currentTime = 0.0f;
 	float m_lastTime = 0.0f;
+    float m_targetFpsTime = 0.0f;
 
 	float m_fpsLastTime = 0.0f;
 	int m_frames = 0;
@@ -24,11 +26,12 @@ private:
     uint8_t m_DebugDelay = 0;
 
 protected:
-	std::unique_ptr<Shader> m_vertexShader;
-	std::unique_ptr<Shader> m_fragmentShader;
+    std::map<std::string, Shader*> m_Shaders;
 
 public:
 	Window* window;
+
+    const float TARGET_FPS = 60.0f;
 
 	float deltaTime = 0.0f;
 	float fps = 0.0f;
@@ -93,4 +96,6 @@ private:
 
 	void UpdateDeltaTime();
 	void CalculateFPS();
+
+    void HoldTargetFPS();
 };

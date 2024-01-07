@@ -1,12 +1,23 @@
 #include "Shader.h"
 
-Shader::Shader(ShaderType type = ShaderType::NONE) : type(type) { }
-Shader::~Shader()
+Shader::Shader(const std::string& vertexPath, const std::string& fragmentPath)
 {
-	glDeleteShader(id);
+    std::string vertexShaderString = Shader::LoadFromFile(vertexPath);
+    std::string fragmentShaderString = Shader::LoadFromFile(fragmentPath);
+
+    CreateShader(vertexShaderString, ShaderType::VERTEX);
+    CreateShader(fragmentShaderString, ShaderType::FRAGMENT);
+
+    CreateProgram();
 }
 
-bool Shader::LoadFromFile(const std::string& path)
+Shader::~Shader()
+{
+	DeleteProgram();
+    DeleteShader();
+}
+
+std::string Shader::LoadFromFile(const std::string& path)
 {
 	std::ifstream stream;
 	stream.open(path);
@@ -16,51 +27,30 @@ bool Shader::LoadFromFile(const std::string& path)
 		std::string line;
 
 		while (getline(stream, line)) {
-			if(line.find("#shader") != std::string::npos)
-			{
-				if (line.find("vertex") != std::string::npos)
-					type = ShaderType::VERTEX;
-				else if(line.find("fragment") != std::string::npos)
-					type = ShaderType::FRAGMENT;
-			}
-			else
-			{
-				stringStream << line << "\n";
-			}
+            stringStream << line << "\n";
 		}
 		stream.close();
 	}
-	else
-	{
-		return false;
-	}
+	else return {};
 
-	m_shaderString = stringStream.str();
-	return true;
+	return stringStream.str();
 }
 
-void Shader::LoadFromString(const std::string& string)
+GLuint Shader::CreateShader(const std::string& shaderString, ShaderType type)
 {
-	m_shaderString = string;
-}
-
-GLuint Shader::CreateShader()
-{
-	id = 0;
+	GLuint id = 0;
 
 	switch(type)
 	{
-	case ShaderType::NONE:
-		return 0;
 	case ShaderType::VERTEX:
-		id = GLCallReturn(glCreateShader(GL_VERTEX_SHADER));
+        this->m_VertexShader = id = GLCallReturn(glCreateShader(GL_VERTEX_SHADER));
 		break;
 	case ShaderType::FRAGMENT:
-		id = GLCallReturn(glCreateShader(GL_FRAGMENT_SHADER));
+        this->m_FragmentShader = id = GLCallReturn(glCreateShader(GL_FRAGMENT_SHADER));
 		break;
 	}
 
-	const GLchar* shader = m_shaderString.c_str();
+    const char* shader = shaderString.c_str();
 	GLCall(glShaderSource(id, 1, &shader, nullptr));
 	GLCall(glCompileShader(id));
 
@@ -77,90 +67,45 @@ GLuint Shader::CreateShader()
 		ERROR(message);
 	}
 
-	return id;
+    return id;
 }
 
-void Shader::DeleteProgram() {
-	GLCall(glDeleteProgram(program));
+GLuint Shader::CreateProgram() {
+    this->m_Program = GLCallReturn(glCreateProgram());
+
+    GLCall(glAttachShader(this->m_Program, this->m_VertexShader));
+    GLCall(glAttachShader(this->m_Program, this->m_FragmentShader));
+
+    return this->m_Program;
 }
 
-GLuint Shader::LinkShaders(const Shader* vertex, const Shader* fragment)
+void Shader::DeleteShader() const {
+    GLCall(glDeleteShader(this->m_FragmentShader));
+    GLCall(glDeleteShader(this->m_VertexShader));
+}
+
+void Shader::DeleteProgram() const {
+    GLCall(glDetachShader(this->m_Program, this->m_VertexShader));
+    GLCall(glDetachShader(this->m_Program, this->m_FragmentShader));
+
+	GLCall(glDeleteProgram(this->m_Program));
+}
+
+void Shader::LinkShader(Shader* shader)
 {
-	if (vertex == nullptr)
-		return 0;
+	GLCall(glLinkProgram(shader->m_Program));
+	GLCall(glValidateProgram(shader->m_Program));
 
-	if (fragment == nullptr)
-		return 0;
+	GLCall(glUseProgram(shader->m_Program));
 
-	if (program == 0)
-		program = GLCallReturn(glCreateProgram());
-
-	if (linkedVertexShader != vertex->id) {
-		linkedVertexShader = vertex->id;
-
-		const GLuint vertexShader = vertex->id;
-        GLCall(glAttachShader(program, vertexShader));
-	}
-
-	if (linkedFragmentShader != fragment->id) {
-		linkedFragmentShader = fragment->id;
-
-		const GLuint fragmentShader = fragment->id;
-		GLCall(glAttachShader(program, fragmentShader));
-	}
-
-	GLCall(glLinkProgram(program));
-	GLCall(glValidateProgram(program));
-
-	GLCall(glUseProgram(program));
-
-	return program;
-}
-
-GLuint Shader::UnlinkShader(ShaderType type)
-{
-	GLuint cachedShader;
-
-	switch(type)
-	{
-	case ShaderType::VERTEX:
-		cachedShader = linkedVertexShader;
-
-		if(linkedVertexShader != 0)
-		{
-			GLCall(glDetachShader(program, linkedVertexShader));
-			linkedVertexShader = 0;
-		}
-
-		return cachedShader;
-
-	case ShaderType::FRAGMENT:
-		cachedShader = linkedFragmentShader;
-
-		if (linkedFragmentShader != 0)
-		{
-			GLCall(glDetachShader(program, linkedFragmentShader));
-			linkedFragmentShader = 0;
-		}
-
-		return cachedShader;
-
-	default:
-		return 0;
-	}
-}
-
-void Shader::UnlinkShaders()
-{
-	UnlinkShader(ShaderType::VERTEX);
-	UnlinkShader(ShaderType::FRAGMENT);
+    Shader::linkedShader = shader;
 }
 
 GLint Shader::getUniform(const std::string& name) {
 	if (m_UniformLocations.find(name) != m_UniformLocations.end())
 		return m_UniformLocations[name];
 
-	const GLint uniformLocation = GLCallReturn(glGetUniformLocation(program, name.c_str()));
+	const GLint uniformLocation = GLCallReturn(glGetUniformLocation(this->m_Program, name.c_str()));
 	m_UniformLocations[name] = uniformLocation;
 	return uniformLocation;
 }
@@ -220,7 +165,4 @@ void Shader::SetUniformMatrix4fv(const std::string& name, const glm::mat4& value
 	glUniformMatrix4fv(uniform, 1, false, &value[0][0]);
 }
 
-GLuint Shader::program = 0;
-GLuint Shader::linkedVertexShader = 0;
-GLuint Shader::linkedFragmentShader = 0;
-std::map<std::string, GLint> Shader::m_UniformLocations = {};
+Shader* Shader::linkedShader = nullptr;
