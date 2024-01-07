@@ -33,21 +33,21 @@ void Game::Init()
 	};
 
 	GLuint vao;
-	GLCall(glGenVertexArrays(1, &vao));
-	GLCall(glBindVertexArray(vao));
+	GLCall(glGenVertexArrays(1, &vao))
+	GLCall(glBindVertexArray(vao))
 
 	GLuint bufferId;
-	GLCall(glGenBuffers(1, &bufferId));
-	GLCall(glBindBuffer(GL_ARRAY_BUFFER, bufferId));
-	GLCall(glBufferData(GL_ARRAY_BUFFER, 8 * sizeof(GLfloat), &vertices[0], GL_STATIC_DRAW));
+	GLCall(glGenBuffers(1, &bufferId))
+	GLCall(glBindBuffer(GL_ARRAY_BUFFER, bufferId))
+	GLCall(glBufferData(GL_ARRAY_BUFFER, 8 * sizeof(GLfloat), &vertices[0], GL_STATIC_DRAW))
 
-	GLCall(glEnableVertexAttribArray(0));
-	GLCall(glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(GLfloat) * 2, nullptr));
+	GLCall(glEnableVertexAttribArray(0))
+	GLCall(glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(GLfloat) * 2, nullptr))
 
 	GLuint ibo;
-	GLCall(glGenBuffers(1, &ibo));
-	GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo));
-	GLCall(glBufferData(GL_ELEMENT_ARRAY_BUFFER, 6 * sizeof(GLuint), &indicies[0], GL_STATIC_DRAW));
+	GLCall(glGenBuffers(1, &ibo))
+	GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo))
+	GLCall(glBufferData(GL_ELEMENT_ARRAY_BUFFER, 6 * sizeof(GLuint), &indicies[0], GL_STATIC_DRAW))
 }
 
 void Game::LoadContent()
@@ -81,7 +81,7 @@ void Game::Draw()
     Shader* shader = Shader::GetLinkedShader();
     shader->SetUniform4f("u_Color", glm::vec4(r, 0.4f, 0.4f, 1.0f));
 
-	GLCall(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr));
+	GLCall(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr))
 }
 
 void Game::ChangeSize(Window* window, int width, int height)

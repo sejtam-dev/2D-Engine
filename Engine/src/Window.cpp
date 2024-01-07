@@ -25,6 +25,7 @@ void Window::CreateWindow()
 	if(m_window == nullptr)
 	{
 		ERROR("GLFW window creation failed!");
+        return;
 	}
 
 	glfwMakeContextCurrent(m_window);

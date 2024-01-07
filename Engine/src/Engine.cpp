@@ -26,8 +26,8 @@ void Engine::Run()
 
 	while (!window->ShouldClose())
 	{
-		GLCall(glClearColor(0.07f, 0.13f, 0.17f, 1.0f));
-		GLCall(glClear(GL_COLOR_BUFFER_BIT));
+		GLCall(glClearColor(0.07f, 0.13f, 0.17f, 1.0f))
+		GLCall(glClear(GL_COLOR_BUFFER_BIT))
 
 		UpdateDeltaTime();
 		CalculateFPS();
@@ -36,7 +36,7 @@ void Engine::Run()
         if(m_DebugDelay == 200) {
             std::stringstream windowTitle;
             windowTitle << window->title << " [" << fps << " FPS]";
-            GLCall(glfwSetWindowTitle(window->GLFWWindow(), windowTitle.str().c_str()));
+            GLCall(glfwSetWindowTitle(window->GLFWWindow(), windowTitle.str().c_str()))
         }
 #endif
 
@@ -58,8 +58,8 @@ void Engine::Run()
 		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 #endif
 
-		GLCall(glfwSwapBuffers(window->GLFWWindow()));
-		GLCall(glfwPollEvents());
+		GLCall(glfwSwapBuffers(window->GLFWWindow()))
+		GLCall(glfwPollEvents())
 
         if(m_DebugDelay >= 255) {
             m_DebugDelay = 0;

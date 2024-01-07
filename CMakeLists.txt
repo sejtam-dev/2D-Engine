@@ -1,6 +1,7 @@
 ﻿cmake_minimum_required (VERSION 3.8)
 
 option(IMGUI_ENABLED "Build project with IMGUI" OFF)
+option(TEST_GAME_ENABLED "Build TestGame with Project" OFF)
 
 message("==== Project ====")
 message("=")
@@ -230,4 +231,7 @@ message("====================")
 message("")
 
 add_subdirectory(Engine)
-add_subdirectory(TestGame)
+
+if(TEST_GAME_ENABLED)
+    add_subdirectory(TestGame)
+endif()
