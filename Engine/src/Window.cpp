@@ -1,6 +1,6 @@
 #include "Window.h"
 
-Window::Window(int const width, int const height, std::string title) : width(width), height(height), title(std::move(title))
+Window::Window(int const width, int const height, std::string title): title(std::move(title)), width(width), height(height)
 {
 	glfwInit();
 }

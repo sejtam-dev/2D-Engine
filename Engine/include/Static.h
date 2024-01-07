@@ -1,18 +1,14 @@
 #pragma once
 
 #include "GL/glew.h"
-
-#define GLEW_BUILD
-#undef GLEW_STATIC
-
 #include <GLFW/glfw3.h>
 
-#include <string>
 #include <cstring>
+#include <string>
 
 #include <fstream>
-#include <sstream>
 #include <iostream>
+#include <sstream>
 
 
 

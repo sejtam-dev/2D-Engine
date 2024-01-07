@@ -4,8 +4,8 @@
 
 Shader::Shader(std::string name, const std::string& vertexPath, const std::string& fragmentPath): m_Name(std::move(name))
 {
-    std::string vertexShaderString = Shader::LoadFromFile(vertexPath);
-    std::string fragmentShaderString = Shader::LoadFromFile(fragmentPath);
+    const std::string vertexShaderString = Shader::LoadFromFile(vertexPath);
+    const std::string fragmentShaderString = Shader::LoadFromFile(fragmentPath);
 
     CreateShader(vertexShaderString, ShaderType::VERTEX);
     CreateShader(fragmentShaderString, ShaderType::FRAGMENT);
@@ -56,16 +56,16 @@ GLuint Shader::CreateShader(const std::string& shaderString, ShaderType type)
 
     const char* shader = shaderString.c_str();
 	GLCall(glShaderSource(id, 1, &shader, nullptr));
-	GLCall(glCompileShader(id))
+	GLCall(glCompileShader(id));
 
 	GLint result;
-	GLCall(glGetShaderiv(id, GL_COMPILE_STATUS, &result))
+	GLCall(glGetShaderiv(id, GL_COMPILE_STATUS, &result));
 	if(result == GL_FALSE)
 	{
         GLint length;
-		GLCall(glGetShaderiv(id, GL_INFO_LOG_LENGTH, &length))
+		GLCall(glGetShaderiv(id, GL_INFO_LOG_LENGTH, &length));
         auto* message = static_cast<GLchar*>(alloca(length * sizeof(GLchar)));
-		GLCall(glGetShaderInfoLog(id, length, &length, message))
+		GLCall(glGetShaderInfoLog(id, length, &length, message));
 
 		ERROR("Failed to compile " << (type == ShaderType::VERTEX ? "vertex" : "fragment") << " shader!");
 		ERROR(message);
@@ -77,30 +77,30 @@ GLuint Shader::CreateShader(const std::string& shaderString, ShaderType type)
 GLuint Shader::CreateProgram() {
     this->m_Program = GLCallReturn(glCreateProgram());
 
-    GLCall(glAttachShader(this->m_Program, this->m_VertexShader))
-    GLCall(glAttachShader(this->m_Program, this->m_FragmentShader))
+    GLCall(glAttachShader(this->m_Program, this->m_VertexShader));
+    GLCall(glAttachShader(this->m_Program, this->m_FragmentShader));
 
     return this->m_Program;
 }
 
 void Shader::DeleteShader() const {
-    GLCall(glDeleteShader(this->m_VertexShader))
-    GLCall(glDeleteShader(this->m_FragmentShader))
+    GLCall(glDeleteShader(this->m_VertexShader));
+    GLCall(glDeleteShader(this->m_FragmentShader));
 }
 
 void Shader::DeleteProgram() const {
-    GLCall(glDetachShader(this->m_Program, this->m_VertexShader))
-    GLCall(glDetachShader(this->m_Program, this->m_FragmentShader))
+    GLCall(glDetachShader(this->m_Program, this->m_VertexShader));
+    GLCall(glDetachShader(this->m_Program, this->m_FragmentShader));
 
-	GLCall(glDeleteProgram(this->m_Program))
+	GLCall(glDeleteProgram(this->m_Program));
 }
 
 void Shader::LinkShader(Shader* shader)
 {
-	GLCall(glLinkProgram(shader->m_Program))
-	GLCall(glValidateProgram(shader->m_Program))
+	GLCall(glLinkProgram(shader->m_Program));
+	GLCall(glValidateProgram(shader->m_Program));
 
-	GLCall(glUseProgram(shader->m_Program))
+	GLCall(glUseProgram(shader->m_Program));
 
     Shader::linkedShader = shader;
 }

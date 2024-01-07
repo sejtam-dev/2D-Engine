@@ -1,8 +1,8 @@
 #pragma once
 
+#include "Shader.h"
 #include "Static.h"
 #include "Window.h"
-#include "Shader.h"
 
 #ifdef IMGUI_ENABLED
     #include "imgui.h"
@@ -11,7 +11,6 @@
 #endif
 
 #include <thread>
-#include <vector>
 
 class Engine
 {

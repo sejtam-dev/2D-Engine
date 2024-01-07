@@ -26,8 +26,8 @@ void Engine::Run()
 
 	while (!window->ShouldClose())
 	{
-		GLCall(glClearColor(0.07f, 0.13f, 0.17f, 1.0f))
-		GLCall(glClear(GL_COLOR_BUFFER_BIT))
+		GLCall(glClearColor(0.07f, 0.13f, 0.17f, 1.0f));
+		GLCall(glClear(GL_COLOR_BUFFER_BIT));
 
 		UpdateDeltaTime();
 		CalculateFPS();
@@ -58,8 +58,8 @@ void Engine::Run()
 		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 #endif
 
-		GLCall(glfwSwapBuffers(window->GLFWWindow()))
-		GLCall(glfwPollEvents())
+		GLCall(glfwSwapBuffers(window->GLFWWindow()));
+		GLCall(glfwPollEvents());
 
         if(m_DebugDelay >= 255) {
             m_DebugDelay = 0;
@@ -122,6 +122,7 @@ void Engine::CreateShaders()
 
 void Engine::HoldTargetFPS()
 {
+	// TODO: Add sleep function
     while(glfwGetTime() < m_targetFpsTime + 1.0f/TARGET_FPS);
 
     m_targetFpsTime += 1.0f/TARGET_FPS;
