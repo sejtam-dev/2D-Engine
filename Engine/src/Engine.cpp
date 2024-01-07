@@ -111,6 +111,7 @@ void Engine::CalculateFPS()
 void Engine::CreateShaders()
 {
     auto* defaultShader = new Shader(
+        "default",
         "Resources/shaders/DefaultVertexShader.shader",
         "Resources/shaders/DefaultFragmentShader.shader"
     );

@@ -1,14 +1,18 @@
 #include "Shader.h"
 
-Shader::Shader(const std::string& vertexPath, const std::string& fragmentPath)
+#include <utility>
+
+Shader::Shader(std::string name, const std::string& vertexPath, const std::string& fragmentPath): m_Name(std::move(name))
 {
     std::string vertexShaderString = Shader::LoadFromFile(vertexPath);
     std::string fragmentShaderString = Shader::LoadFromFile(fragmentPath);
 
     CreateShader(vertexShaderString, ShaderType::VERTEX);
     CreateShader(fragmentShaderString, ShaderType::FRAGMENT);
+    LOG("Shader '" << this->m_Name << "' created! Vertex Shader ID: " << this->m_VertexShader << " | " << " Fragment Shader ID: " << this->m_FragmentShader);
 
     CreateProgram();
+    LOG("Shader '" << this->m_Name << "' program created! Program ID: " << this->m_Program);
 }
 
 Shader::~Shader()

@@ -20,6 +20,8 @@ enum class ShaderType
 class Shader
 {
 private:
+    std::string m_Name;
+
 	GLuint m_Program;
 	GLuint m_VertexShader;
 	GLuint m_FragmentShader;
@@ -31,7 +33,7 @@ private:
 
 public:
     Shader() = default;
-	Shader(const std::string& vertexPath, const std::string& fragmentPath);
+	Shader(std::string name, const std::string& vertexPath, const std::string& fragmentPath);
 	~Shader();
 
 	GLuint CreateShader(const std::string& shaderString, ShaderType type);
