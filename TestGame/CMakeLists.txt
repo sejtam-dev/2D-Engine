@@ -50,25 +50,39 @@ set_target_properties(TestGame
 
 add_custom_command(TARGET TestGame POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy_if_different
-        $<TARGET_FILE_DIR:Engine>/Engine.dll
+        $<TARGET_FILE_DIR:Engine>/engine.dll
         $<TARGET_FILE_DIR:TestGame>
 )
 
 add_custom_command(TARGET TestGame POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy_directory
-        ${ROOT_DIR}/Engine/Resources/
+        $<TARGET_FILE_DIR:Engine>/Resources/
         $<TARGET_FILE_DIR:TestGame>/Resources
 )
 
 add_custom_command(TARGET TestGame POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy_if_different
-        $<TARGET_FILE_DIR:glfw>/glfw3.dll
+        $<TARGET_FILE_DIR:glfw>/glfw.dll
         $<TARGET_FILE_DIR:TestGame>
 )
 
 add_custom_command(TARGET TestGame POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy_if_different
-        $<TARGET_FILE_DIR:libglew_shared>/glew-sharedd.dll
+        $<TARGET_FILE_DIR:libglew_shared>/glew.dll
+        $<TARGET_FILE_DIR:TestGame>
+)
+
+if(IMGUI_ENABLED)
+    add_custom_command(TARGET TestGame POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different
+            $<TARGET_FILE_DIR:imgui_shared>/imgui.dll
+            $<TARGET_FILE_DIR:TestGame>
+    )
+endif()
+
+add_custom_command(TARGET TestGame POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different
+        $<TARGET_FILE_DIR:glm_shared>/glm.dll
         $<TARGET_FILE_DIR:TestGame>
 )
 

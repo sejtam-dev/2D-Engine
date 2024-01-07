@@ -4,9 +4,11 @@
 #include "Window.h"
 #include "Shader.h"
 
-#include "imgui.h"
-#include "backends/imgui_impl_glfw.h"
-#include "backends/imgui_impl_opengl3.h"
+#ifdef IMGUI_ENABLED
+    #include "imgui.h"
+    #include "backends/imgui_impl_glfw.h"
+    #include "backends/imgui_impl_opengl3.h"
+#endif
 
 #include <thread>
 
@@ -18,6 +20,8 @@ private:
 
 	float m_fpsLastTime = 0.0f;
 	int m_frames = 0;
+
+    uint8_t m_DebugDelay = 0;
 
 protected:
 	std::unique_ptr<Shader> m_vertexShader;
@@ -45,7 +49,10 @@ protected:
 	virtual void Update() {}
 
 	virtual void Draw() {}
+
+#ifdef IMGUI_ENABLED
 	virtual void DrawImGUI() {}
+#endif
 
 	void CreateShaders();
 
@@ -64,20 +71,25 @@ private:
 		printf("OpenGL version supported by this platform (%s): \n", glGetString(GL_VERSION));
 	}
 
+#ifdef IMGUI_ENABLED
 	void InitImGUI() {
 		IMGUI_CHECKVERSION();
 		ImGui::CreateContext();
+
 		ImGuiIO& io = ImGui::GetIO(); (void)io;
 		ImGui::StyleColorsDark();
+
 		ImGui_ImplGlfw_InitForOpenGL(window->GLFWWindow(), true);
-		ImGui_ImplOpenGL3_Init("#version 330");
+		ImGui_ImplOpenGL3_Init("#version 460");
 	}
 
 	void ImGuiTerminate() {
 		ImGui_ImplOpenGL3_Shutdown();
 		ImGui_ImplGlfw_Shutdown();
+
 		ImGui::DestroyContext();
 	}
+#endif
 
 	void UpdateDeltaTime();
 	void CalculateFPS();

@@ -48,11 +48,11 @@ public:
 	static void UnlinkShaders();
 
 	static void SetUniform1f(const std::string& name, float value1);
-	static void SetUniform2f(const std::string& name, glm::vec2& value);
-	static void SetUniform3f(const std::string& name, glm::vec3& value);
-	static void SetUniform4f(const std::string& name, glm::vec4& value);
+	static void SetUniform2f(const std::string& name, const glm::vec2& value);
+	static void SetUniform3f(const std::string& name, const glm::vec3& value);
+	static void SetUniform4f(const std::string& name, const glm::vec4& value);
 
-	static void SetUniformMatrix2fv(const std::string& name, glm::mat2& value);
-	static void SetUniformMatrix3fv(const std::string& name, glm::mat3& value);
-	static void SetUniformMatrix4fv(const std::string& name, glm::mat4& value);
+	static void SetUniformMatrix2fv(const std::string& name, const glm::mat2& value);
+	static void SetUniformMatrix3fv(const std::string& name, const glm::mat3& value);
+	static void SetUniformMatrix4fv(const std::string& name, const glm::mat4& value);
 };

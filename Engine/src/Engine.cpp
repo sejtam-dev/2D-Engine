@@ -19,7 +19,9 @@ void Engine::Run()
 	CreateShaders();
     Shader::LinkShaders(m_vertexShader.get(), m_fragmentShader.get());
 
+#ifdef IMGUI_ENABLED
 	InitImGUI();
+#endif
 
 	while (!window->ShouldClose())
 	{
@@ -29,27 +31,36 @@ void Engine::Run()
 		UpdateDeltaTime();
 		CalculateFPS();
 
-#if DEBUG
-		std::stringstream windowTitle;
-		windowTitle << window->title << " [" << fps << " FPS]";
-		GLCall(glfwSetWindowTitle(window->GLFWWindow(), windowTitle.str().c_str()));
-#endif
+        if(m_DebugDelay == 200) {
+            std::stringstream windowTitle;
+            windowTitle << window->title << " [" << fps << " FPS]";
+            GLCall(glfwSetWindowTitle(window->GLFWWindow(), windowTitle.str().c_str()));
+        }
 
 		Update();
 
+#ifdef IMGUI_ENABLED
 		ImGui_ImplOpenGL3_NewFrame();
 		ImGui_ImplGlfw_NewFrame();
 		ImGui::NewFrame();
+#endif
 		
 		Draw();
+
+#ifdef IMGUI_ENABLED
 		DrawImGUI();
 
 		ImGui::EndFrame();
 		ImGui::Render();
 		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+#endif
 
 		GLCall(glfwSwapBuffers(window->GLFWWindow()));
 		GLCall(glfwPollEvents());
+
+        if(m_DebugDelay >= 255) {
+            m_DebugDelay = 0;
+        } else m_DebugDelay++;
 	}
 
 	Shader::UnlinkShaders();
@@ -57,7 +68,9 @@ void Engine::Run()
 
 	UnloadContent();
 
+#ifdef IMGUI_ENABLED
 	ImGuiTerminate();
+#endif
 
 	// Delete window
 	glfwTerminate();

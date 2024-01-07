@@ -173,7 +173,7 @@ void Shader::SetUniform1f(const std::string& name, const float value1)
 
 	glUniform1f(uniform, value1);
 }
-void Shader::SetUniform2f(const std::string& name, glm::vec2& value)
+void Shader::SetUniform2f(const std::string& name, const glm::vec2& value)
 {
 	const GLint uniform = getUniform(name);
 	if (uniform == -1)
@@ -181,7 +181,7 @@ void Shader::SetUniform2f(const std::string& name, glm::vec2& value)
 
 	glUniform2f(uniform, value.x, value.y);
 }
-void Shader::SetUniform3f(const std::string& name, glm::vec3& value)
+void Shader::SetUniform3f(const std::string& name, const glm::vec3& value)
 {
 	const GLint uniform = getUniform(name);
 	if (uniform == -1)
@@ -189,7 +189,7 @@ void Shader::SetUniform3f(const std::string& name, glm::vec3& value)
 
 	glUniform3f(uniform, value.x, value.y, value.z);
 }
-void Shader::SetUniform4f(const std::string& name, glm::vec4& value)
+void Shader::SetUniform4f(const std::string& name, const glm::vec4& value)
 {
 	const GLint uniform = getUniform(name);
 	if (uniform == -1)
@@ -198,21 +198,21 @@ void Shader::SetUniform4f(const std::string& name, glm::vec4& value)
 	glUniform4f(uniform, value.x, value.y, value.z, value.w);
 }
 
-void Shader::SetUniformMatrix2fv(const std::string& name, glm::mat2& value) {
+void Shader::SetUniformMatrix2fv(const std::string& name, const glm::mat2& value) {
 	const GLint uniform = getUniform(name);
 	if (uniform == -1)
 		return;
 
 	glUniformMatrix2fv(uniform, 1, false, &value[0][0]);
 }
-void Shader::SetUniformMatrix3fv(const std::string& name, glm::mat3& value) {
+void Shader::SetUniformMatrix3fv(const std::string& name, const glm::mat3& value) {
 	const GLint uniform = getUniform(name);
 	if (uniform == -1)
 		return;
 
 	glUniformMatrix3fv(uniform, 1, false, &value[0][0]);
 }
-void Shader::SetUniformMatrix4fv(const std::string& name, glm::mat4& value) {
+void Shader::SetUniformMatrix4fv(const std::string& name, const glm::mat4& value) {
 	const GLint uniform = getUniform(name);
 	if (uniform == -1)
 		return;

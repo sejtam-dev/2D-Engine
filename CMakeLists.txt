@@ -1,5 +1,7 @@
 ﻿cmake_minimum_required (VERSION 3.8)
 
+option(IMGUI_ENABLED "Build project with IMGUI" OFF)
+
 message("==== Project ====")
 message("=")
 
@@ -58,10 +60,15 @@ endif()
 message("= OS: ${PROJECT_OS}")
 message("=")
 
+## DEFINITIONS
 if(${CMAKE_BUILD_TYPE} STREQUAL Debug)
     add_definitions(-DDEBUG)
 else()
     add_definitions(-DRELEASE)
+endif()
+
+if(IMGUI_ENABLED)
+    add_definitions(-DIMGUI_ENABLED)
 endif()
 
 ## Libraries
@@ -90,9 +97,10 @@ else()
     message("= Status: Not Found")
 endif()
 
-set_target_properties(glfw PROPERTIES PREFIX "")
 set_target_properties(glfw
     PROPERTIES
+        PREFIX ""
+        OUTPUT_NAME "glfw"
         RUNTIME_OUTPUT_DIRECTORY ${ROOT_DIR}/build/${CMAKE_BUILD_TYPE}/bin/glfw
         LIBRARY_OUTPUT_DIRECTORY ${ROOT_DIR}/build/${CMAKE_BUILD_TYPE}/lib/glfw
         ARCHIVE_OUTPUT_DIRECTORY ${ROOT_DIR}/build/${CMAKE_BUILD_TYPE}/lib/glfw
@@ -118,9 +126,10 @@ else()
     message("= Status: Not Found")
 endif()
 
-set_target_properties(libglew_shared PROPERTIES PREFIX "")
 set_target_properties(libglew_shared
     PROPERTIES
+        PREFIX ""
+        OUTPUT_NAME "glew"
         RUNTIME_OUTPUT_DIRECTORY ${ROOT_DIR}/build/${CMAKE_BUILD_TYPE}/bin/glew
         LIBRARY_OUTPUT_DIRECTORY ${ROOT_DIR}/build/${CMAKE_BUILD_TYPE}/lib/glew
         ARCHIVE_OUTPUT_DIRECTORY ${ROOT_DIR}/build/${CMAKE_BUILD_TYPE}/lib/glew
@@ -148,63 +157,69 @@ endif()
 
 set_target_properties(glm_shared
     PROPERTIES
+        PREFIX ""
+        OUTPUT_NAME "glm"
         RUNTIME_OUTPUT_DIRECTORY ${ROOT_DIR}/build/${CMAKE_BUILD_TYPE}/bin/glm
         LIBRARY_OUTPUT_DIRECTORY ${ROOT_DIR}/build/${CMAKE_BUILD_TYPE}/lib/glm
         ARCHIVE_OUTPUT_DIRECTORY ${ROOT_DIR}/build/${CMAKE_BUILD_TYPE}/lib/glm
 )
 
 # ImGUI
-message("== ImGUI")
-message("=")
+if(IMGUI_ENABLED)
+    message("== ImGUI")
+    message("=")
 
-set(IMGUI_ROOT_DIR ${ROOT_DIR}/3rdparty/imgui)
-message("= Root Directory: ${IMGUI_ROOT_DIR}")
-message("=")
+    set(IMGUI_ROOT_DIR ${ROOT_DIR}/3rdparty/imgui)
+    message("= Root Directory: ${IMGUI_ROOT_DIR}")
+    message("=")
 
-# Create library
-add_library(imgui_shared SHARED)
+    # Create library
+    add_library(imgui_shared SHARED)
 
-# Set tart sources
-target_sources(imgui_shared 
-    PRIVATE
-        ${IMGUI_ROOT_DIR}/imgui.cpp    
-        ${IMGUI_ROOT_DIR}/imgui_draw.cpp
-        ${IMGUI_ROOT_DIR}/imgui_tables.cpp
-        ${IMGUI_ROOT_DIR}/imgui_widgets.cpp
-        ${IMGUI_ROOT_DIR}/backends/imgui_impl_glfw.cpp
-        ${IMGUI_ROOT_DIR}/backends/imgui_impl_opengl3.cpp
-)
+    # Set tart sources
+    target_sources(imgui_shared
+        PRIVATE
+            ${IMGUI_ROOT_DIR}/imgui.cpp
+            ${IMGUI_ROOT_DIR}/imgui_draw.cpp
+            ${IMGUI_ROOT_DIR}/imgui_tables.cpp
+            ${IMGUI_ROOT_DIR}/imgui_widgets.cpp
+            ${IMGUI_ROOT_DIR}/backends/imgui_impl_glfw.cpp
+            ${IMGUI_ROOT_DIR}/backends/imgui_impl_opengl3.cpp
+    )
 
-# Include directories
-target_include_directories(imgui_shared
-    PUBLIC 
-        ${IMGUI_ROOT_DIR}
-        ${IMGUI_ROOT_DIR}/backends
-    PRIVATE 
-        ${GLFW_ROOT_DIR}/include
-)
+    # Include directories
+    target_include_directories(imgui_shared
+        PUBLIC
+            ${IMGUI_ROOT_DIR}
+            ${IMGUI_ROOT_DIR}/backends
+        PRIVATE
+            ${GLFW_ROOT_DIR}/include
+    )
 
-# Link libraries
-target_link_libraries(imgui_shared 
-    PRIVATE glfw
-)
+    # Link libraries
+    target_link_libraries(imgui_shared
+        PRIVATE glfw
+    )
 
-if(TARGET imgui_shared)
-    set(IMGUI_INCLUDE_DIR)
-    list(APPEND IMGUI_INCLUDE_DIR ${IMGUI_ROOT_DIR}) 
-    list(APPEND IMGUI_INCLUDE_DIR ${IMGUI_ROOT_DIR}/backends)   
+    if(TARGET imgui_shared)
+        set(IMGUI_INCLUDE_DIR)
+        list(APPEND IMGUI_INCLUDE_DIR ${IMGUI_ROOT_DIR})
+        list(APPEND IMGUI_INCLUDE_DIR ${IMGUI_ROOT_DIR}/backends)
 
-    message("= Status: Found")
-else()
-    message("= Status: Not Found")
+        message("= Status: Found")
+    else()
+        message("= Status: Not Found")
+    endif()
+
+    set_target_properties(imgui_shared
+        PROPERTIES
+            PREFIX ""
+            OUTPUT_NAME "imgui"
+            RUNTIME_OUTPUT_DIRECTORY ${ROOT_DIR}/build/${CMAKE_BUILD_TYPE}/bin/imgui
+            LIBRARY_OUTPUT_DIRECTORY ${ROOT_DIR}/build/${CMAKE_BUILD_TYPE}/lib/imgui
+            ARCHIVE_OUTPUT_DIRECTORY ${ROOT_DIR}/build/${CMAKE_BUILD_TYPE}/lib/imgui
+    )
 endif()
-
-set_target_properties(imgui_shared
-    PROPERTIES
-        RUNTIME_OUTPUT_DIRECTORY ${ROOT_DIR}/build/${CMAKE_BUILD_TYPE}/bin/imgui
-        LIBRARY_OUTPUT_DIRECTORY ${ROOT_DIR}/build/${CMAKE_BUILD_TYPE}/lib/imgui
-        ARCHIVE_OUTPUT_DIRECTORY ${ROOT_DIR}/build/${CMAKE_BUILD_TYPE}/lib/imgui
-)
 
 message("=")
 message("====================")

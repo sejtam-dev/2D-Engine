@@ -41,8 +41,10 @@ list(APPEND ENGINE_INCLUDE_DIRS ${GLM_INCLUDE_DIR})
 list(APPEND ENGINE_LIBRARIES glm_shared)
 
 # IMGUI
-list(APPEND ENGINE_INCLUDE_DIRS ${IMGUI_INCLUDE_DIR})
-list(APPEND ENGINE_LIBRARIES imgui_shared)
+if(IMGUI_ENABLED)
+    list(APPEND ENGINE_INCLUDE_DIRS ${IMGUI_INCLUDE_DIR})
+    list(APPEND ENGINE_LIBRARIES imgui_shared)
+endif()
 
 # Create Library
 include_directories(${ENGINE_INCLUDES_DIR})
@@ -52,9 +54,10 @@ add_library(Engine SHARED ${ENGINE_SOURCES})
 target_include_directories(Engine PUBLIC ${ENGINE_INCLUDES_DIRS})
 target_link_libraries(Engine PUBLIC ${ENGINE_LIBRARIES})
 
-set_target_properties(Engine PROPERTIES PREFIX "")
 set_target_properties(Engine
     PROPERTIES
+        PREFIX ""
+        OUTPUT_NAME "engine"
         RUNTIME_OUTPUT_DIRECTORY ${ROOT_DIR}/build/${CMAKE_BUILD_TYPE}/bin/Engine
         LIBRARY_OUTPUT_DIRECTORY ${ROOT_DIR}/build/${CMAKE_BUILD_TYPE}/lib/Engine
         ARCHIVE_OUTPUT_DIRECTORY ${ROOT_DIR}/build/${CMAKE_BUILD_TYPE}/lib/Engine
