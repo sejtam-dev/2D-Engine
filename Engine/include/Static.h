@@ -39,11 +39,11 @@
 #define GLCall( x ) \
      GLClearErrors(); \
      x; \
-     if ( GLLogCall( #x) ) __debugbreak();
+     if ( GLLogCall( #x, __FILE__, __LINE__) ) __debugbreak();
 #define GLCallReturn( x ) [&]() { \
      GLClearErrors(); \
      auto retVal = x; \
-     if ( GLLogCall( #x) ) __debugbreak(); \
+     if ( GLLogCall( #x, __FILE__, __LINE__) ) __debugbreak(); \
      return retVal; \
    }()
 #else
@@ -59,7 +59,7 @@ static void GLClearErrors()
 	while (glGetError() != GL_NO_ERROR);
 }
 
-static bool GLLogCall(const char* function)
+static bool GLLogCall(const char* function, const char* file, const int line)
 {
 	while(const GLenum errorCode = glGetError())
 	{
@@ -76,7 +76,7 @@ static bool GLLogCall(const char* function)
             default:                               errorStr = "Undefined"; break;
         }
 
-		ERROR("[OpenGL Error] (" << errorCode << " | " << errorStr << ") => " << function );
+        std::cerr << "[OpenGL Error] (" << errorCode << " | " << errorStr << ") => " << function << " | " << file << " | " << line << std::endl;
 
 		return true;
 	}

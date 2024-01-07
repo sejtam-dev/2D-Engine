@@ -70,10 +70,6 @@ void Engine::Run()
 
     for (auto const& pair: m_Shaders) {
         Shader* shader = pair.second;
-
-        shader->DeleteProgram();
-        shader->DeleteShader();
-
         delete shader;
     }
 

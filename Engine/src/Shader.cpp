@@ -80,8 +80,8 @@ GLuint Shader::CreateProgram() {
 }
 
 void Shader::DeleteShader() const {
-    GLCall(glDeleteShader(this->m_FragmentShader));
     GLCall(glDeleteShader(this->m_VertexShader));
+    GLCall(glDeleteShader(this->m_FragmentShader));
 }
 
 void Shader::DeleteProgram() const {
