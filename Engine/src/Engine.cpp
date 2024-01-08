@@ -1,5 +1,8 @@
 #include "Engine.h"
 
+#include <chrono>
+#include <thread>
+
 Engine::Engine() {
     window = new Window(800, 600, "Engine");
 }
@@ -114,8 +117,9 @@ void Engine::CreateShaders() {
 }
 
 void Engine::HoldTargetFPS() {
-    // TODO: Add sleep function
-    while (glfwGetTime() < m_targetFpsTime + 1.0f / TARGET_FPS);
+    while (glfwGetTime() < m_targetFpsTime + 1.0f / TARGET_FPS) {
+        std::this_thread::sleep_for(std::chrono::milliseconds(10));
+    }
 
     m_targetFpsTime += 1.0f / TARGET_FPS;
 }
