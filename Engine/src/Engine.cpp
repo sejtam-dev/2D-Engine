@@ -1,131 +1,121 @@
 #include "Engine.h"
 
-Engine::Engine()
-{
-	window = new Window(800, 600, "Engine");
+Engine::Engine() {
+    window = new Window(800, 600, "Engine");
 }
 
-void Engine::Run()
-{
-	// Create window
-	window->CreateWindow();
+void Engine::Run() {
+    // Create window
+    window->CreateWindow();
 
-	// Init GLEW
-	InitGLEW();
+    // Init GLEW
+    InitGLEW();
 
-	Init();
-	LoadContent();
+    Init();
+    LoadContent();
 
-	CreateShaders();
+    CreateShaders();
 
 #ifdef IMGUI_ENABLED
-	InitImGUI();
+    InitImGUI();
 #endif
 
     m_targetFpsTime = static_cast<float>(glfwGetTime());
 
-	while (!window->ShouldClose())
-	{
-		GLCall(glClearColor(0.07f, 0.13f, 0.17f, 1.0f));
-		GLCall(glClear(GL_COLOR_BUFFER_BIT));
+    while (!window->ShouldClose()) {
+        GLCall(glClearColor(0.07f, 0.13f, 0.17f, 1.0f));
+        GLCall(glClear(GL_COLOR_BUFFER_BIT));
 
-		UpdateDeltaTime();
-		CalculateFPS();
+        UpdateDeltaTime();
+        CalculateFPS();
 
 #ifdef DEBUG
-        if(m_DebugDelay == 200) {
+        if (m_DebugDelay == 200) {
             std::stringstream windowTitle;
             windowTitle << window->title << " [" << fps << " FPS]";
             GLCall(glfwSetWindowTitle(window->GLFWWindow(), windowTitle.str().c_str()))
         }
 #endif
 
-		Update();
+        Update();
 
 #ifdef IMGUI_ENABLED
-		ImGui_ImplOpenGL3_NewFrame();
-		ImGui_ImplGlfw_NewFrame();
-		ImGui::NewFrame();
+        ImGui_ImplOpenGL3_NewFrame();
+        ImGui_ImplGlfw_NewFrame();
+        ImGui::NewFrame();
 #endif
-		
-		Draw();
+
+        Draw();
 
 #ifdef IMGUI_ENABLED
-		DrawImGUI();
+        DrawImGUI();
 
-		ImGui::EndFrame();
-		ImGui::Render();
-		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+        ImGui::EndFrame();
+        ImGui::Render();
+        ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 #endif
 
-		GLCall(glfwSwapBuffers(window->GLFWWindow()));
-		GLCall(glfwPollEvents());
+        GLCall(glfwSwapBuffers(window->GLFWWindow()));
+        GLCall(glfwPollEvents());
 
-        if(m_DebugDelay >= 255) {
+        if (m_DebugDelay >= 255) {
             m_DebugDelay = 0;
         } else m_DebugDelay++;
 
         HoldTargetFPS();
-	}
+    }
 
-    for (auto const& pair: m_Shaders) {
-        Shader* shader = pair.second;
+    for (auto const &pair: m_Shaders) {
+        Shader *shader = pair.second;
         delete shader;
     }
 
-	UnloadContent();
+    UnloadContent();
 
 #ifdef IMGUI_ENABLED
-	ImGuiTerminate();
+    ImGuiTerminate();
 #endif
 
-	// Delete window
-	glfwTerminate();
-	delete window;
+    // Delete window
+    glfwTerminate();
+    delete window;
 }
 
-void Engine::UpdateDeltaTime()
-{
-	m_currentTime = static_cast<float>(glfwGetTime());
-	deltaTime = m_currentTime - m_lastTime;
-	m_lastTime = m_currentTime;
+void Engine::UpdateDeltaTime() {
+    m_currentTime = static_cast<float>(glfwGetTime());
+    deltaTime = m_currentTime - m_lastTime;
+    m_lastTime = m_currentTime;
 }
 
-void Engine::CalculateFPS()
-{
-	if (m_fpsLastTime == 0.0f)
-		m_fpsLastTime = m_currentTime;
+void Engine::CalculateFPS() {
+    if (m_fpsLastTime == 0.0f)
+        m_fpsLastTime = m_currentTime;
 
-	m_frames++;
+    m_frames++;
 
-	const float delta = m_currentTime - m_fpsLastTime;
-	if(delta >= 1.0f)
-	{
-		fps = static_cast<float>(m_frames) / delta;
+    const float delta = m_currentTime - m_fpsLastTime;
+    if (delta >= 1.0f) {
+        fps = static_cast<float>(m_frames) / delta;
 
-		m_frames = 0;
-		m_fpsLastTime = m_currentTime;
-	}
+        m_frames = 0;
+        m_fpsLastTime = m_currentTime;
+    }
 }
 
-void Engine::CreateShaders()
-{
-    auto* defaultShader = new Shader(
+void Engine::CreateShaders() {
+    auto *defaultShader = new Shader(
         "default",
         "Resources/shaders/DefaultVertexShader.shader",
         "Resources/shaders/DefaultFragmentShader.shader"
     );
 
-	m_Shaders.emplace("default", defaultShader);
+    m_Shaders.emplace("default", defaultShader);
     Shader::LinkShader(defaultShader);
 }
 
-void Engine::HoldTargetFPS()
-{
-	// TODO: Add sleep function
-    while(glfwGetTime() < m_targetFpsTime + 1.0f/TARGET_FPS);
+void Engine::HoldTargetFPS() {
+    // TODO: Add sleep function
+    while (glfwGetTime() < m_targetFpsTime + 1.0f / TARGET_FPS);
 
-    m_targetFpsTime += 1.0f/TARGET_FPS;
+    m_targetFpsTime += 1.0f / TARGET_FPS;
 }
-
-

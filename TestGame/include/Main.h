@@ -2,20 +2,21 @@
 
 #include "Engine.h"
 
-class Game : public Engine
-{
+class Game : public Engine {
 public:
-	Game();
+    Game();
 
 protected:
-	void Init() override;
+    void Init() override;
 
-	void LoadContent() override;
-	void UnloadContent() override;
+    void LoadContent() override;
 
-	void Update() override;
-	void Draw() override;
+    void UnloadContent() override;
+
+    void Update() override;
+
+    void Draw() override;
 
 private:
-	static void ChangeSize(Window* window, int width, int height);
+    static void ChangeSize(Window *window, int width, int height);
 };
