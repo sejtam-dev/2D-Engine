@@ -1,14 +1,7 @@
-#include "Main.h"
+#include "game.h"
 
 float r = 0;
 float value = 0.5f;
-
-int main() {
-    const std::unique_ptr<Game> game(new Game());
-    game->Run();
-
-    return 0;
-}
 
 Game::Game() {
     window->title = "TestGame";

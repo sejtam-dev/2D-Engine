@@ -1,10 +1,10 @@
-#include "Engine.h"
+#include "engine.h"
 
 #include <chrono>
 #include <thread>
 
 Engine::Engine() {
-    window = new Window(800, 600, "Engine");
+    this->window = new Window(800, 600, "Engine");
 }
 
 void Engine::Run() {

@@ -1,4 +1,4 @@
-﻿cmake_minimum_required (VERSION 3.8)
+﻿cmake_minimum_required (VERSION 3.11)
 
 message("")
 message("====== Engine ======")
@@ -38,7 +38,7 @@ list(APPEND ENGINE_LIBRARIES libglew_shared)
 
 # GLM
 list(APPEND ENGINE_INCLUDE_DIRS ${GLM_INCLUDE_DIR})
-list(APPEND ENGINE_LIBRARIES glm_shared)
+list(APPEND ENGINE_LIBRARIES glm)
 
 # IMGUI
 if(IMGUI_ENABLED)

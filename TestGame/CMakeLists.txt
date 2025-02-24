@@ -1,4 +1,4 @@
-﻿cmake_minimum_required (VERSION 3.8)
+﻿cmake_minimum_required (VERSION 3.11)
 
 message("")
 message("===== TestGame =====")
@@ -82,7 +82,7 @@ endif()
 
 add_custom_command(TARGET TestGame POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy_if_different
-        $<TARGET_FILE_DIR:glm_shared>/glm.dll
+        $<TARGET_FILE_DIR:glm>/glm.dll
         $<TARGET_FILE_DIR:TestGame>
 )
 

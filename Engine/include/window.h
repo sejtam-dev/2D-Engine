@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Static.h"
+#include "static.h"
 
 class Window {
 public:

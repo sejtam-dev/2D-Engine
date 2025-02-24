@@ -1,8 +1,8 @@
 #pragma once
 
-#include "Shader.h"
-#include "Static.h"
-#include "Window.h"
+#include "shader.h"
+#include "static.h"
+#include "window.h"
 
 #ifdef IMGUI_ENABLED
 #include "imgui.h"

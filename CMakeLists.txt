@@ -1,4 +1,4 @@
-﻿cmake_minimum_required (VERSION 3.8)
+﻿cmake_minimum_required (VERSION 3.11)
 
 option(IMGUI_ENABLED "Build project with IMGUI" OFF)
 option(TEST_GAME_ENABLED "Build TestGame with Project" OFF)
@@ -142,7 +142,7 @@ set_target_properties(libglew_shared
 message("== GLM")
 message("=")
 
-set(BUILD_SHARED_LIBS on)
+set(GLM_BUILD_LIBRARY on)
 
 set(GLM_ROOT_DIR ${ROOT_DIR}/3rdparty/glm)
 message("= Root Directory: ${GLM_ROOT_DIR}")
@@ -150,23 +150,23 @@ message("=")
 
 add_subdirectory(${GLM_ROOT_DIR})
 
-if(TARGET glm_shared)
+if(TARGET glm)
     set(GLM_INCLUDE_DIR ${GLM_ROOT_DIR}/glm)
 
     message("= Status: Found")
+
+    set_target_properties(glm
+            PROPERTIES
+            PREFIX ""
+            OUTPUT_NAME "glm"
+            DEBUG_POSTFIX ""
+            RUNTIME_OUTPUT_DIRECTORY ${ROOT_DIR}/build/${CMAKE_BUILD_TYPE}/bin/glm
+            LIBRARY_OUTPUT_DIRECTORY ${ROOT_DIR}/build/${CMAKE_BUILD_TYPE}/lib/glm
+            ARCHIVE_OUTPUT_DIRECTORY ${ROOT_DIR}/build/${CMAKE_BUILD_TYPE}/lib/glm
+    )
 else()
     message("= Status: Not Found")
 endif()
-
-set_target_properties(glm_shared
-    PROPERTIES
-        PREFIX ""
-        OUTPUT_NAME "glm"
-        DEBUG_POSTFIX ""
-        RUNTIME_OUTPUT_DIRECTORY ${ROOT_DIR}/build/${CMAKE_BUILD_TYPE}/bin/glm
-        LIBRARY_OUTPUT_DIRECTORY ${ROOT_DIR}/build/${CMAKE_BUILD_TYPE}/lib/glm
-        ARCHIVE_OUTPUT_DIRECTORY ${ROOT_DIR}/build/${CMAKE_BUILD_TYPE}/lib/glm
-)
 
 # ImGUI
 if(IMGUI_ENABLED)
