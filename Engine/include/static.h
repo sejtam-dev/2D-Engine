@@ -9,6 +9,7 @@
 #include <fstream>
 #include <iostream>
 #include <sstream>
+#include <format>
 
 
 #ifdef Engine_EXPORTS
@@ -17,19 +18,23 @@
 #define ENGINE_API __declspec(dllimport)
 #endif
 
+#ifndef __FILE_NAME__
 #if _WIN32
-#define __FILENAME__ ({const char * pStr = strrchr(__FILE__, '\\'); pStr ? pStr + 1 : __FILE__;})
+#define __FILE_NAME__ ({const char * pStr = strrchr(__FILE__, '\\'); pStr ? pStr + 1 : __FILE__;})
 #else
-#define __FILENAME__ ({const char * pStr = strrchr(__FILE__, '/'); pStr ? pStr + 1 : __FILE__;})
+#define __FILE_NAME__ ({const char * pStr = strrchr(__FILE__, '/'); pStr ? pStr + 1 : __FILE__;})
+#endif
 #endif
 
-#define LOG(message) \
-    std::cout << "(" << __FILENAME__ << " | " << __LINE__ << "): " << message << std::endl
+#define LOG(fmt, ...) \
+    std::cout << std::format("[LOG] {}:{} | " fmt, __FILE_NAME__, __LINE__, __VA_ARGS__) << std::endl
 
-#define ERROR(message) \
-    std::cerr << "(" << __FILENAME__ << " | " << __LINE__ << "): " << message << std::endl
+#define ERROR(fmt, ...) \
+    std::cerr << std::format("[ERROR] {}:{} | " fmt, __FILE_NAME__, __LINE__, __VA_ARGS__) << std::endl
 
 #ifdef DEBUG
+#define DEBUG_LOG(fmt, ...) \
+    std::cout << std::format("[DEBUG] {}:{} | " fmt, __FILE_NAME__, __LINE__, __VA_ARGS__) << std::endl
 
 #define GLCall( x ) \
      GLClearErrors(); \
@@ -47,6 +52,7 @@
 #define GLCallReturn( x ) [&]() {\
          return x; \
     }()
+#define DEBUG_LOG(...)
 #endif
 
 static void GLClearErrors() {

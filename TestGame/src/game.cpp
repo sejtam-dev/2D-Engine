@@ -17,7 +17,7 @@ void Game::Init() {
         -0.5f, 0.5f,
     };
 
-    const GLuint indicies[] = {
+    constexpr GLuint indicies[] = {
         0, 1, 2,
         2, 3, 0
     };
@@ -69,5 +69,5 @@ void Game::Draw() {
 }
 
 void Game::ChangeSize(Window *window, int width, int height) {
-    LOG("Size changed: " << width << "x" << height);
+    DEBUG_LOG("Size changed: {}x{}", width, height);
 }

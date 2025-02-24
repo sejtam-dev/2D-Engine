@@ -2,18 +2,18 @@
 
 #include <utility>
 
-Shader::Shader(std::string name, const std::string &vertexPath, const std::string &fragmentPath): m_Name(
-    std::move(name)) {
+Shader::Shader(std::string name, const std::string &vertexPath, const std::string &fragmentPath)
+    : m_Name(std::move(name)) {
     const std::string vertexShaderString = Shader::LoadFromFile(vertexPath);
     const std::string fragmentShaderString = Shader::LoadFromFile(fragmentPath);
 
     CreateShader(vertexShaderString, ShaderType::VERTEX);
     CreateShader(fragmentShaderString, ShaderType::FRAGMENT);
-    LOG("Shader '" << this->m_Name << "' created! Vertex Shader ID: " << this->m_VertexShader << " | " <<
-        " Fragment Shader ID: " << this->m_FragmentShader);
+    LOG("Shader '{}' created! Vertex Shader ID: {} | Fragment Shader ID: {}", this->m_Name, this->m_VertexShader,
+        this->m_FragmentShader);
 
     CreateProgram();
-    LOG("Shader '" << this->m_Name << "' program created! Program ID: " << this->m_Program);
+    LOG("Shader '{}' program created! Program ID: {}", this->m_Name, this->m_Program);
 }
 
 Shader::~Shader() {
@@ -62,8 +62,8 @@ GLuint Shader::CreateShader(const std::string &shaderString, ShaderType type) {
         auto *message = static_cast<GLchar *>(alloca(length * sizeof(GLchar)));
         GLCall(glGetShaderInfoLog(id, length, &length, message));
 
-        ERROR("Failed to compile " << (type == ShaderType::VERTEX ? "vertex" : "fragment") << " shader!");
-        ERROR(message);
+        ERROR("Failed to compile {} shader!", (type == ShaderType::VERTEX ? "vertex" : "fragment"));
+        ERROR("{}", message);
     }
 
     return id;
@@ -83,17 +83,21 @@ GLuint Shader::CreateProgram() {
     return this->m_Program;
 }
 
-void Shader::DeleteShader() const {
+void Shader::DeleteShader() {
     if (this->m_VertexShader != -1) {
         GLCall(glDeleteShader(this->m_VertexShader));
+
+        this->m_VertexShader = -1;
     }
 
     if (this->m_FragmentShader != -1) {
         GLCall(glDeleteShader(this->m_FragmentShader));
+
+        this->m_FragmentShader = -1;
     }
 }
 
-void Shader::DeleteProgram() const {
+void Shader::DeleteProgram() {
     if (this->m_Program != -1) {
         if (this->m_VertexShader != -1) {
             GLCall(glDetachShader(this->m_Program, this->m_VertexShader));

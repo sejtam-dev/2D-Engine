@@ -40,9 +40,9 @@ public:
 
     GLuint CreateProgram();
 
-    void DeleteShader() const;
+    void DeleteShader();
 
-    void DeleteProgram() const;
+    void DeleteProgram();
 
     static Shader *GetLinkedShader() {
         return linkedShader;

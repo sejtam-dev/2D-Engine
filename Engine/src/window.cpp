@@ -1,7 +1,7 @@
 #include "window.h"
 
-Window::Window(int const width, int const height, std::string title): title(std::move(title)), width(width),
-                                                                      height(height) {
+Window::Window(int const width, int const height, std::string title)
+    : title(std::move(title)), width(width), height(height) {
     glfwInit();
 }
 
@@ -20,7 +20,7 @@ void Window::CreateWindow() {
 
     m_window = glfwCreateWindow(width, height, title.c_str(), nullptr, nullptr);
     if (m_window == nullptr) {
-        ERROR("GLFW window creation failed!");
+        ERROR("{}", "GLFW window creation failed!");
         return;
     }
 

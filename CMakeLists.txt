@@ -13,7 +13,7 @@ message("= Root Directory: ${ROOT_DIR}")
 message("=")
 
 # C++ Standarts
-set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
