@@ -1,4 +1,4 @@
-#include "engine.h"
+#include "Engine.h"
 
 #include <chrono>
 #include <thread>
@@ -13,6 +13,9 @@ void Engine::Run() {
 
     // Init GLEW
     InitGLEW();
+
+    // Create components
+    CreateCamera();
 
     Init();
     LoadContent();
@@ -68,8 +71,8 @@ void Engine::Run() {
         HoldTargetFPS();
     }
 
-    for (auto const &pair: m_Shaders) {
-        Shader *shader = pair.second;
+    for (const auto &[fst, snd]: m_Shaders) {
+        const Shader* shader = snd;
         delete shader;
     }
 
@@ -116,6 +119,13 @@ void Engine::CreateShaders() {
     Shader::LinkShader(defaultShader);
 }
 
+void Engine::CreateCamera() const {
+    Engine::Camera = std::make_unique<Camera2D>(
+        static_cast<float>(window->GetWidth()),
+        static_cast<float>(window->GetHeight())
+    );
+}
+
 void Engine::HoldTargetFPS() {
     while (glfwGetTime() < m_targetFpsTime + 1.0f / TARGET_FPS) {
         std::this_thread::sleep_for(std::chrono::milliseconds(10));
@@ -123,3 +133,5 @@ void Engine::HoldTargetFPS() {
 
     m_targetFpsTime += 1.0f / TARGET_FPS;
 }
+
+std::unique_ptr<Camera2D> Engine::Camera = nullptr;

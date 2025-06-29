@@ -1,4 +1,4 @@
-#include "game.h"
+#include "Game.h"
 
 float r = 0;
 float value = 0.5f;
@@ -11,10 +11,10 @@ void Game::Init() {
     window->ChangeSizeEvent(ChangeSize);
 
     constexpr GLfloat vertices[] = {
-        -0.5f, -0.5f,
-        0.5f, -0.5f,
-        0.5f, 0.5f,
-        -0.5f, 0.5f,
+        100.0f, 100.0f,
+        250.0f, 100.0f,
+        250.0f, 200.0f,
+        100.0f, 200.0f
     };
 
     constexpr GLuint indicies[] = {
@@ -54,15 +54,17 @@ void Game::Update() {
         value = 0.5f * deltaTime;
     }
 
-#ifdef DEBUG
-    std::cout << deltaTime << ", " << r << std::endl;
-#endif
+    //DEBUG_LOG("DeltaTime: {} | R: {}", deltaTime, r);
 }
 
 void Game::Draw() {
     Shader::LinkShader(m_Shaders["default"]);
 
+
     Shader *shader = Shader::GetLinkedShader();
+    shader->SetUniformMatrix4fv("u_Projection", Camera->GetProjectionMatrix());
+    shader->SetUniformMatrix4fv("u_View", Camera->GetViewMatrix());
+
     shader->SetUniform4f("u_Color", glm::vec4(r, 0.4f, 0.4f, 1.0f));
 
     GLCall(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr));

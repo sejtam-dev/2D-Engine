@@ -1,4 +1,4 @@
-#include "shader.h"
+#include "Shader.h"
 
 #include <utility>
 
@@ -38,7 +38,7 @@ std::string Shader::LoadFromFile(const std::string &path) {
     return stringStream.str();
 }
 
-GLuint Shader::CreateShader(const std::string &shaderString, ShaderType type) {
+GLuint Shader::CreateShader(const std::string &shaderString, const ShaderType type) {
     GLuint id = 0;
 
     switch (type) {

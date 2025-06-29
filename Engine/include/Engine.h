@@ -1,8 +1,9 @@
 #pragma once
 
-#include "shader.h"
+#include "Shader.h"
 #include "static.h"
-#include "window.h"
+#include "Window.h"
+#include "Camera2D.h"
 
 #ifdef IMGUI_ENABLED
 #include "imgui.h"
@@ -34,11 +35,14 @@ public:
     float deltaTime = 0.0f;
     float fps = 0.0f;
 
-    Engine(const Engine &) = delete;
+    // Components
+    static std::unique_ptr<Camera2D> Camera;
 
+    Engine(const Engine &) = delete;
     Engine &operator=(const Engine &) = delete;
 
     Engine();
+    virtual ~Engine() = default;
 
     void Run();
 
@@ -58,12 +62,11 @@ protected:
     virtual void Draw() {
     }
 
-#ifdef IMGUI_ENABLED
     virtual void DrawImGUI() {
     }
-#endif
 
     void CreateShaders();
+    void CreateCamera() const;
 
 private:
     void InitGLEW() {
@@ -72,18 +75,18 @@ private:
         glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
         if (glewInit() != GLEW_OK) {
-            std::cerr << "GLEW initialization failed." << std::endl;
+            ERROR("{}", "GLEW initialization failed.");
         }
 
-        printf("OpenGL version supported by this platform (%s): \n", glGetString(GL_VERSION));
+        LOG("OpenGL version supported by this platform: {}", reinterpret_cast<const char*>(glGetString(GL_VERSION)));
     }
 
 #ifdef IMGUI_ENABLED
-    void InitImGUI() {
+    void InitImGUI() const {
         IMGUI_CHECKVERSION();
         ImGui::CreateContext();
 
-        ImGuiIO &io = ImGui::GetIO();
+        const ImGuiIO &io = ImGui::GetIO();
         (void) io;
         ImGui::StyleColorsDark();
 
@@ -91,7 +94,7 @@ private:
         ImGui_ImplOpenGL3_Init("#version 460");
     }
 
-    void ImGuiTerminate() {
+    void ImGuiTerminate() const {
         ImGui_ImplOpenGL3_Shutdown();
         ImGui_ImplGlfw_Shutdown();
 
