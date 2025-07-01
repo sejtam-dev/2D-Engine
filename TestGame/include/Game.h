@@ -7,16 +7,16 @@ public:
     Game();
 
 protected:
-    void Init() override;
+    void OnInit() override;
 
-    void LoadContent() override;
+    void OnLoadContent() override;
 
-    void UnloadContent() override;
+    void OnUnloadContent() override;
 
-    void Update() override;
+    void OnUpdate() override;
 
-    void Draw() override;
+    void OnDraw() override;
 
 private:
-    static void ChangeSize(Window *window, int width, int height);
+    static void ChangeSize(Window* window, int width, int height);
 };

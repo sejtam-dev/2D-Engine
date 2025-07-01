@@ -1,10 +1,11 @@
 #include "Engine.h"
 
-#include <chrono>
 #include <thread>
+#include <ranges>
 
 Engine::Engine() {
-    this->window = new Window(800, 600, "Engine");
+    window = std::make_unique<Window>(800, 600, "Engine");
+    sceneManager = std::make_unique<SceneManager>();
 }
 
 void Engine::Run() {
@@ -15,10 +16,11 @@ void Engine::Run() {
     InitGLEW();
 
     // Create components
+    // TODO: Rework -> Change camera to component
     CreateCamera();
 
-    Init();
-    LoadContent();
+    OnInit();
+    OnLoadContent();
 
     CreateShaders();
 
@@ -29,6 +31,8 @@ void Engine::Run() {
     m_targetFpsTime = static_cast<float>(glfwGetTime());
 
     while (!window->ShouldClose()) {
+        sceneManager->ProcessPendingChanges();
+
         GLCall(glClearColor(0.07f, 0.13f, 0.17f, 1.0f));
         GLCall(glClear(GL_COLOR_BUFFER_BIT));
 
@@ -43,7 +47,7 @@ void Engine::Run() {
         }
 #endif
 
-        Update();
+        OnUpdate();
 
 #ifdef IMGUI_ENABLED
         ImGui_ImplOpenGL3_NewFrame();
@@ -51,10 +55,10 @@ void Engine::Run() {
         ImGui::NewFrame();
 #endif
 
-        Draw();
+        OnDraw();
 
 #ifdef IMGUI_ENABLED
-        DrawImGUI();
+        OnDrawImGUI();
 
         ImGui::EndFrame();
         ImGui::Render();
@@ -71,21 +75,48 @@ void Engine::Run() {
         HoldTargetFPS();
     }
 
-    for (const auto &[fst, snd]: m_Shaders) {
-        const Shader* shader = snd;
-        delete shader;
-    }
-
-    UnloadContent();
+    m_Shaders.clear();
+    OnUnloadContent();
 
 #ifdef IMGUI_ENABLED
     ImGuiTerminate();
 #endif
 
-    // Delete window
     glfwTerminate();
-    delete window;
 }
+
+void Engine::InitGLEW() {
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+
+    if (glewInit() != GLEW_OK) {
+        ERROR("{}", "GLEW initialization failed.");
+    }
+
+    LOG("OpenGL version supported by this platform: {}", reinterpret_cast<const char*>(glGetString(GL_VERSION)));
+}
+
+#ifdef IMGUI_ENABLED
+void Engine::InitImGUI() const {
+    IMGUI_CHECKVERSION();
+    ImGui::CreateContext();
+
+    const ImGuiIO& io = ImGui::GetIO();
+    (void) io;
+    ImGui::StyleColorsDark();
+
+    ImGui_ImplGlfw_InitForOpenGL(window->GLFWWindow(), true);
+    ImGui_ImplOpenGL3_Init("#version 460");
+}
+
+void Engine::ImGuiTerminate() const {
+    ImGui_ImplOpenGL3_Shutdown();
+    ImGui_ImplGlfw_Shutdown();
+
+    ImGui::DestroyContext();
+}
+#endif
 
 void Engine::UpdateDeltaTime() {
     m_currentTime = static_cast<float>(glfwGetTime());
@@ -109,14 +140,14 @@ void Engine::CalculateFPS() {
 }
 
 void Engine::CreateShaders() {
-    auto *defaultShader = new Shader(
+    auto defaultShader = std::make_unique<Shader>(
         "default",
         "Resources/shaders/DefaultVertexShader.shader",
         "Resources/shaders/DefaultFragmentShader.shader"
     );
 
-    m_Shaders.emplace("default", defaultShader);
-    Shader::LinkShader(defaultShader);
+    Shader::LinkShader(defaultShader.get());
+    m_Shaders.emplace("default", std::move(defaultShader));
 }
 
 void Engine::CreateCamera() const {

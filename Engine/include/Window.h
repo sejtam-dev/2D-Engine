@@ -1,10 +1,10 @@
 #pragma once
 
-#include "static.h"
+#include "Utils.h"
 
 class Window {
 public:
-    typedef void (*EngineChangeSize)(Window *window, int width, int height);
+    typedef void (*EngineChangeSize)(Window* window, int width, int height);
 
     std::string title;
 
@@ -12,13 +12,13 @@ private:
     int width;
     int height;
 
-    GLFWwindow *m_window;
+    GLFWwindow* m_window;
     EngineChangeSize m_changeSizeEvent;
 
 public:
-    Window(const Window &) = delete;
+    Window(const Window&) = delete;
 
-    Window &operator=(const Window &) = delete;
+    Window& operator=(const Window&) = delete;
 
     Window(int width, int height, std::string title);
 
@@ -26,7 +26,7 @@ public:
 
     void CreateWindow();
 
-    GLFWwindow *GLFWWindow() const {
+    GLFWwindow* GLFWWindow() const {
         return m_window;
     }
 
@@ -47,5 +47,5 @@ public:
     }
 
 private:
-    static void FrameBufferResizeCallback(GLFWwindow *window, int width, int height);
+    static void FrameBufferResizeCallback(GLFWwindow* window, int width, int height);
 };

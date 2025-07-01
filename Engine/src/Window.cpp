@@ -31,12 +31,12 @@ void Window::CreateWindow() {
     glfwSetFramebufferSizeCallback(m_window, FrameBufferResizeCallback);
 }
 
-void Window::FrameBufferResizeCallback(GLFWwindow *window, const int width, const int height) {
-    const auto engineWindow = static_cast<Window *>(glfwGetWindowUserPointer(window));
+void Window::FrameBufferResizeCallback(GLFWwindow* window, const int width, const int height) {
+    const auto engineWindow = static_cast<Window*>(glfwGetWindowUserPointer(window));
     engineWindow->width = width;
     engineWindow->height = height;
 
-    glViewport(0, 0, width, height);
+    GLCall(glViewport(0, 0, width, height));
     //Engine::Camera->SetSize(width, height);
 
     if (engineWindow->m_changeSizeEvent) {

@@ -7,7 +7,7 @@ Game::Game() {
     window->title = "TestGame";
 }
 
-void Game::Init() {
+void Game::OnInit() {
     window->ChangeSizeEvent(ChangeSize);
 
     constexpr GLfloat vertices[] = {
@@ -40,13 +40,13 @@ void Game::Init() {
     GLCall(glBufferData(GL_ELEMENT_ARRAY_BUFFER, 6 * sizeof(GLuint), &indicies[0], GL_STATIC_DRAW));
 }
 
-void Game::LoadContent() {
+void Game::OnLoadContent() {
 }
 
-void Game::UnloadContent() {
+void Game::OnUnloadContent() {
 }
 
-void Game::Update() {
+void Game::OnUpdate() {
     r += value;
     if (r > 1) {
         value = -0.5f * deltaTime;
@@ -57,11 +57,11 @@ void Game::Update() {
     //DEBUG_LOG("DeltaTime: {} | R: {}", deltaTime, r);
 }
 
-void Game::Draw() {
-    Shader::LinkShader(m_Shaders["default"]);
+void Game::OnDraw() {
+    Shader::LinkShader(m_Shaders["default"].get());
 
 
-    Shader *shader = Shader::GetLinkedShader();
+    Shader* shader = Shader::GetLinkedShader();
     shader->SetUniformMatrix4fv("u_Projection", Camera->GetProjectionMatrix());
     shader->SetUniformMatrix4fv("u_View", Camera->GetViewMatrix());
 
@@ -70,6 +70,6 @@ void Game::Draw() {
     GLCall(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr));
 }
 
-void Game::ChangeSize(Window *window, int width, int height) {
+void Game::ChangeSize(Window* window, int width, int height) {
     DEBUG_LOG("Size changed: {}x{}", width, height);
 }

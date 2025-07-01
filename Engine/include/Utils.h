@@ -29,6 +29,9 @@
 #define LOG(fmt, ...) \
     std::cout << std::format("[LOG] {}:{} | " fmt, __FILE_NAME__, __LINE__, __VA_ARGS__) << std::endl
 
+#define WARNING(fmt, ...) \
+    std::cout << std::format("[WARNING] {}:{} | " fmt, __FILE_NAME__, __LINE__, __VA_ARGS__) << std::endl
+
 #define ERROR(fmt, ...) \
     std::cerr << std::format("[ERROR] {}:{} | " fmt, __FILE_NAME__, __LINE__, __VA_ARGS__) << std::endl
 
@@ -59,7 +62,7 @@ static void GLClearErrors() {
     while (glGetError() != GL_NO_ERROR);
 }
 
-static bool GLLogCall(const char *function, const char *file, const int line) {
+static bool GLLogCall(const char* function, const char* file, const int line) {
     while (const GLenum errorCode = glGetError()) {
         std::string errorStr;
         switch (errorCode) {
