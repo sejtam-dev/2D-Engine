@@ -7,6 +7,7 @@ export module Game.Components:TestComponent;
 
 import Engine;
 import Engine.Components;
+import Engine.Graphics;
 
 export class TestComponent : public Component {
 

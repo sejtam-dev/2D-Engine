@@ -1,9 +1,7 @@
 module;
 #include <memory>
 
-export module Engine.Objects:Component;
-
-import :Forward;
+export module Engine.Components:Component;
 
 export class Component {
 public:

@@ -6,7 +6,6 @@ module;
 
 module Engine.Objects;
 import :Scene;
-import :Component;
 
 import Engine.Components;
 
@@ -64,13 +63,13 @@ void GameObject::Destroy() {
     }
 }
 
-Transform& GameObject::GetTransform() {
-    const std::shared_ptr<Transform> transform = GetComponent<Transform>();
+std::shared_ptr<Transform>& GameObject::GetTransform() {
+    std::shared_ptr<Transform> transform = GetComponent<Transform>();
     if (!transform) {
         throw std::runtime_error("Transform component not found. Please add a Transform component to the GameObject.");
     }
 
-    return *transform;
+    return transform;
 }
 
 void GameObject::Initialize() {

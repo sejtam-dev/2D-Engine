@@ -82,7 +82,7 @@ public:
 
     void Destroy();
 
-    Transform& GetTransform();
+    std::shared_ptr<Transform>& GetTransform();
 
 private:
     GameObject() = default;

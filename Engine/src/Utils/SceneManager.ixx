@@ -161,8 +161,8 @@ private:
 
     std::string GenerateInstanceID(const std::string& typeName);
 
-    std::map<std::string, std::shared_ptr<Scene>> m_Scenes;
-    std::vector<std::weak_ptr<Scene>> m_SceneStack;
+    std::map<std::string, std::shared_ptr<Scene>> m_Scenes{};
+    std::vector<std::weak_ptr<Scene>> m_SceneStack{};
     std::vector<SceneChange> m_PendingChanges;
 
     std::map<std::string, int> m_InstanceCounter;

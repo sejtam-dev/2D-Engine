@@ -6,4 +6,3 @@ export module Engine.Objects:Forward;
 
 export class GameObject;
 export class Scene;
-export class Component;
