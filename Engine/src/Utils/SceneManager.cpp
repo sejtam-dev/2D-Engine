@@ -1,6 +1,7 @@
 module;
 #include "Utils.h"
 #include <ranges>
+#include <memory>
 
 module Engine.Utils;
 

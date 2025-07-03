@@ -6,7 +6,7 @@ module;
 
 export module Engine.Components:Transform;
 
-import :Component;
+import Engine.Objects;
 
 export class Transform : public Component {
 public:

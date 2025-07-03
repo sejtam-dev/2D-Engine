@@ -6,9 +6,7 @@ module;
 
 export module Engine.Objects:GameObject;
 
-// TODO: Module forward declaration
-
-export class Scene;
+import :Forward;
 
 export class GameObject : public std::enable_shared_from_this<GameObject> {
 public:
@@ -89,9 +87,7 @@ public:
 private:
     GameObject() = default;
 
-    void Initialize() {
-        AddComponent<Transform>();
-    }
+    void Initialize();
 
     std::unordered_map<std::type_index, std::shared_ptr<Component>> m_Components{};
     std::weak_ptr<Scene> m_World;

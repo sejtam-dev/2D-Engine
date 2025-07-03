@@ -1,9 +1,9 @@
 module;
 #include <memory>
 
-export module Engine.Components:Component;
+export module Engine.Objects:Component;
 
-// TODO: Module forward declaration
+import :Forward;
 
 export class Component {
 public:
@@ -39,6 +39,5 @@ public:
         return m_GameObject.lock();
     }
 
-protected:
     std::weak_ptr<GameObject> m_GameObject;
 };

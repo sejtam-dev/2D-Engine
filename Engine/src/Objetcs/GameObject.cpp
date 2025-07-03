@@ -1,9 +1,14 @@
 module;
-
+#include <memory>
+#include <typeindex>
+#include <unordered_map>
 #include <ranges>
 
 module Engine.Objects;
 import :Scene;
+import :Component;
+
+import Engine.Components;
 
 void GameObject::OnAwake() {
     for (auto const& value: std::views::values(m_Components)) {
@@ -67,3 +72,8 @@ Transform& GameObject::GetTransform() {
 
     return *transform;
 }
+
+void GameObject::Initialize() {
+    AddComponent<Transform>();
+}
+

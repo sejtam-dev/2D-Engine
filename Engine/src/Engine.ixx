@@ -20,6 +20,7 @@ export import :Window;
 export import :Camera2D;
 
 import Engine.Graphics;
+import Engine.Utils;
 
 export class Engine {
 public:

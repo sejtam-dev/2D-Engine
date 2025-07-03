@@ -7,7 +7,7 @@ module;
 
 export module Engine.Objects:Scene;
 
-import :GameObject;
+import :Forward;
 
 export class Scene : public std::enable_shared_from_this<Scene> {
 public:
@@ -42,17 +42,7 @@ public:
     void OnDisable(); // TODO: Implement call
 
     template<typename T>
-    std::vector<std::shared_ptr<GameObject>> FindGameObjectsWithComponent() const {
-        std::vector<std::shared_ptr<GameObject>> gameObjects;
-
-        for (auto const& value: m_GameObjects) {
-            if (value->HasComponent<T>()) {
-                gameObjects.push_back(value);
-            }
-        }
-
-        return gameObjects;
-    }
+    std::vector<std::shared_ptr<GameObject>> FindGameObjectsWithComponent() const;
 
     const std::vector<std::shared_ptr<GameObject>>& GetGameObjects() const {
         return m_GameObjects;

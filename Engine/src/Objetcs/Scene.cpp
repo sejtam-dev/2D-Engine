@@ -1,5 +1,7 @@
 module;
 #include <algorithm>
+#include <memory>
+#include <vector>
 
 module Engine.Objects;
 
@@ -73,4 +75,16 @@ void Scene::OnDisable() {
     }
 }
 
+template<typename T>
+std::vector<std::shared_ptr<GameObject>> Scene::FindGameObjectsWithComponent() const {
+    std::vector<std::shared_ptr<GameObject>> gameObjects;
+
+    for (auto const& value: m_GameObjects) {
+        if (value->HasComponent<T>()) {
+            gameObjects.push_back(value);
+        }
+    }
+
+    return gameObjects;
+}
 

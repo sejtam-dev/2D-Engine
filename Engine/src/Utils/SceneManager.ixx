@@ -133,7 +133,7 @@ public:
 private:
     void ApplyPushScene(const std::string& instanceId);
 
-    void SceneManager::ApplyPopScene();
+    void ApplyPopScene();
 
     void ApplyPopScene(const std::string& instanceId);
 

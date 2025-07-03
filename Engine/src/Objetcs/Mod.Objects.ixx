@@ -4,5 +4,7 @@
 
 export module Engine.Objects;
 
+export import :Forward;
 export import :Scene;
 export import :GameObject;
+export import :Component;
