@@ -3,7 +3,9 @@ module;
 #include <memory>
 #include <vector>
 
-module Engine.Objects;
+module Engine.Objects:SceneImpl;
+import :Scene;
+import :GameObject;
 
 std::shared_ptr<GameObject> Scene::CreateGameObject() {
     std::shared_ptr<GameObject> gameObject = GameObject::Create();

@@ -4,7 +4,8 @@ module;
 #include "glm/gtc/matrix_transform.hpp"
 
 
-module Engine;
+module Engine:Camera2DImpl;
+import :Camera2D;
 
 Camera2D::Camera2D(const float width, const float height)
         : m_Width(width), m_Height(height) {

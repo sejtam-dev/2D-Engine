@@ -14,7 +14,12 @@ module;
 #include "backends/imgui_impl_opengl3.h"
 #endif
 
-module Engine;
+module Engine:EngineImpl;
+import :Engine;
+import :Window;
+import :Camera2D;
+
+import Engine.Utils;
 
 Engine::Engine() {
     window = std::make_unique<Window>(800, 600, "Engine");

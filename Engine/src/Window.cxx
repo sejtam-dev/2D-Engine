@@ -3,7 +3,8 @@ module;
 #include "GLFW/glfw3.h"
 #include <string>
 
-module Engine;
+module Engine:WindowImpl;
+import :Window;
 
 Window::Window(const int width, const int height, std::string title)
     : title(std::move(title)), width(width), height(height), m_window(nullptr), m_changeSizeEvent(nullptr) {

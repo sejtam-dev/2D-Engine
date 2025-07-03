@@ -4,7 +4,8 @@ module;
 #include "glm/vec3.hpp"
 #include <glm/gtc/matrix_transform.hpp>
 
-module Engine.Components;
+module Engine.Components:TransformImpl;
+import :Transform;
 
 glm::mat4 Transform::GetTransform() {
     if (!m_TransformDirty) {

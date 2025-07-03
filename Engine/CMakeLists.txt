@@ -24,7 +24,6 @@ set(ENGINE_SOURCE_DIR ${ENGINE_ROOT_DIR}/src)
 file(GLOB_RECURSE ENGINE_SOURCES
         "${ENGINE_SOURCE_DIR}/*.c"
         "${ENGINE_SOURCE_DIR}/*.cpp"
-        "${ENGINE_SOURCE_DIR}/*.cxx"
 )
 
 message("= Source Directory: ${ENGINE_SOURCE_DIR}")
@@ -33,6 +32,7 @@ message("= Source Directory: ${ENGINE_SOURCE_DIR}")
 set(ENGINE_MODULES_DIR ${ENGINE_ROOT_DIR}/src)
 file(GLOB_RECURSE ENGINE_MODULES
         "${ENGINE_MODULES_DIR}/*.ixx"
+        "${ENGINE_SOURCE_DIR}/*.cxx"
 )
 
 message("= Modules Directory: ${ENGINE_MODULES_DIR}")

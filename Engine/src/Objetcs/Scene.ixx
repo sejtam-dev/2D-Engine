@@ -6,8 +6,7 @@ module;
 #include <string>
 
 export module Engine.Objects:Scene;
-
-import :Forward;
+export class GameObject;
 
 export class Scene : public std::enable_shared_from_this<Scene> {
 public:

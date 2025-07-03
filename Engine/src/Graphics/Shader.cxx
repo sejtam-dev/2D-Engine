@@ -12,7 +12,10 @@ module;
 #include <string>
 #include <sstream>
 
-module Engine.Graphics;
+module Engine.Graphics:ShaderImpl;
+import :Shader;
+
+import Engine.Utils;
 
 Shader::Shader(std::string name, const std::string& vertexPath, const std::string& fragmentPath)
     : m_Name(std::move(name)) {

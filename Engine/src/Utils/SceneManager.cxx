@@ -3,7 +3,8 @@ module;
 #include <ranges>
 #include <memory>
 
-module Engine.Utils;
+module Engine.Utils:SceneManagerImpl;
+import :SceneManager;
 
 std::shared_ptr<Scene> SceneManager::GetScene(const std::string& instanceId) const {
     return m_Scenes.at(instanceId);

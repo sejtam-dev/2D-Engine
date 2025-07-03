@@ -14,8 +14,6 @@ module;
 
 export module Engine.Graphics:Shader;
 
-import Engine.Utils;
-
 export class Shader {
 public:
     enum class ShaderType {
@@ -37,7 +35,7 @@ public:
 
     Shader& operator=(Shader&&) = default;
 
-    GLuint CreateShader(const std::string& shaderString, const ShaderType type);
+    GLuint CreateShader(const std::string& shaderString, ShaderType type);
 
     GLuint CreateProgram();
 
@@ -81,7 +79,7 @@ public:
         m_Shaders.clear();
     }
 
-    void SetUniform1f(const std::string& name, const float value1);
+    void SetUniform1f(const std::string& name, float value1);
 
     void SetUniform2f(const std::string& name, const glm::vec2& value);
 

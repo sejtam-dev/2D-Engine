@@ -24,7 +24,6 @@ set(TEST_GAME_SOURCE_DIR ${TEST_GAME_ROOT_DIR}/src)
 file(GLOB_RECURSE TEST_GAME_SOURCES
         "${TEST_GAME_SOURCE_DIR}/*.c"
         "${TEST_GAME_SOURCE_DIR}/*.cpp"
-        "${TEST_GAME_SOURCE_DIR}/*.cxx"
 )
 
 message("= Source Directory: ${TEST_GAME_SOURCE_DIR}")
@@ -33,6 +32,7 @@ message("= Source Directory: ${TEST_GAME_SOURCE_DIR}")
 set(TEST_GAME_MODULES_DIR ${TEST_GAME_ROOT_DIR}/src)
 file(GLOB_RECURSE TEST_GAME_MODULES
         "${TEST_GAME_MODULES_DIR}/*.ixx"
+        "${TEST_GAME_SOURCE_DIR}/*.cxx"
 )
 
 message("= Modules Directory: ${TEST_GAME_MODULES_DIR}")
