@@ -1,4 +1,6 @@
-﻿cmake_minimum_required (VERSION 3.11)
+﻿cmake_minimum_required (VERSION 3.28)
+
+message(${CMAKE_BINARY_DIR})
 
 option(IMGUI_ENABLED "Build project with IMGUI" OFF)
 option(TEST_GAME_ENABLED "Build TestGame with Project" OFF)

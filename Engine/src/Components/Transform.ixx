@@ -1,12 +1,14 @@
-#pragma once
-
-#include "Component.h"
+module;
 #include "glm/fwd.hpp"
 #include "glm/vec2.hpp"
 #include "glm/vec3.hpp"
 #include <glm/gtc/matrix_transform.hpp>
 
-class Transform : public Component {
+export module Engine.Components:Transform;
+
+import :Component;
+
+export class Transform : public Component {
 public:
     Transform() = default;
 

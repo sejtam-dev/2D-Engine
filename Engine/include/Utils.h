@@ -1,16 +1,11 @@
 #pragma once
 
 #include "GL/glew.h"
-#include <GLFW/glfw3.h>
-
-#include <cstring>
 #include <string>
-
 #include <fstream>
 #include <iostream>
-#include <sstream>
 #include <format>
-
+#include <cstring>
 
 #ifdef Engine_EXPORTS
 #define ENGINE_API __declspec(dllexport)
@@ -27,17 +22,17 @@
 #endif
 
 #define LOG(fmt, ...) \
-    std::cout << std::format("[LOG] {}:{} | " fmt, __FILE_NAME__, __LINE__, __VA_ARGS__) << std::endl
+    std::cout << std::format("[LOG] {}:{} | " fmt, __FILE_NAME__, __LINE__, ##__VA_ARGS__) << std::endl
 
 #define WARNING(fmt, ...) \
-    std::cout << std::format("[WARNING] {}:{} | " fmt, __FILE_NAME__, __LINE__, __VA_ARGS__) << std::endl
+    std::cout << std::format("[WARNING] {}:{} | " fmt, __FILE_NAME__, __LINE__, ##__VA_ARGS__) << std::endl
 
 #define ERROR(fmt, ...) \
-    std::cerr << std::format("[ERROR] {}:{} | " fmt, __FILE_NAME__, __LINE__, __VA_ARGS__) << std::endl
+    std::cerr << std::format("[ERROR] {}:{} | " fmt, __FILE_NAME__, __LINE__, ##__VA_ARGS__) << std::endl
 
 #ifdef DEBUG
 #define DEBUG_LOG(fmt, ...) \
-    std::cout << std::format("[DEBUG] {}:{} | " fmt, __FILE_NAME__, __LINE__, __VA_ARGS__) << std::endl
+    std::cout << std::format("[DEBUG] {}:{} | " fmt, __FILE_NAME__, __LINE__, ##__VA_ARGS__) << std::endl
 
 #define GLCall( x ) \
      GLClearErrors(); \

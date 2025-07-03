@@ -1,17 +1,7 @@
-#include "Scene.h"
-
+module;
 #include <algorithm>
 
-#include "GameObject.h"
-
-std::shared_ptr<Scene> Scene::Create() {
-    std::shared_ptr<Scene> scene = std::make_shared<Scene>();
-
-    scene->Initialize();
-
-    return scene;
-}
-
+module Engine.Objects;
 
 std::shared_ptr<GameObject> Scene::CreateGameObject() {
     std::shared_ptr<GameObject> gameObject = GameObject::Create();
@@ -83,15 +73,4 @@ void Scene::OnDisable() {
     }
 }
 
-template<typename T>
-std::vector<std::shared_ptr<GameObject>> Scene::FindGameObjectsWithComponent() const {
-    std::vector<std::shared_ptr<GameObject>> gameObjects;
 
-    for (auto const& value: m_GameObjects) {
-        if (value->HasComponent<T>()) {
-            gameObjects.push_back(value);
-        }
-    }
-
-    return gameObjects;
-}

@@ -1,6 +1,4 @@
-﻿cmake_minimum_required (VERSION 3.11)
-
-message("")
+﻿message("")
 message("===== TestGame =====")
 message("=")
 
@@ -14,15 +12,30 @@ message("= ")
 
 # Headers
 set(TEST_GAME_INCLUDES_DIR ${TEST_GAME_ROOT_DIR}/include)
-file(GLOB TEST_GAME_INCLUDES "${TEST_GAME_INCLUDES_DIR}/*.h" "${TEST_GAME_INCLUDES_DIR}/*.hpp")
+file(GLOB_RECURSE TEST_GAME_INCLUDES
+        "${TEST_GAME_INCLUDES_DIR}/*.h"
+        "${TEST_GAME_INCLUDES_DIR}/*.hpp"
+)
 
 message("= Headers Directory: ${TEST_GAME_INCLUDES_DIR}")
 
 # Source
 set(TEST_GAME_SOURCE_DIR ${TEST_GAME_ROOT_DIR}/src)
-file(GLOB TEST_GAME_SOURCES "${TEST_GAME_SOURCE_DIR}/*.c" "${TEST_GAME_SOURCE_DIR}/*.cpp")
+file(GLOB_RECURSE TEST_GAME_SOURCES
+        "${TEST_GAME_SOURCE_DIR}/*.c"
+        "${TEST_GAME_SOURCE_DIR}/*.cpp"
+        "${TEST_GAME_SOURCE_DIR}/*.cxx"
+)
 
 message("= Source Directory: ${TEST_GAME_SOURCE_DIR}")
+
+# Modules
+set(TEST_GAME_MODULES_DIR ${TEST_GAME_ROOT_DIR}/src)
+file(GLOB_RECURSE TEST_GAME_MODULES
+        "${TEST_GAME_MODULES_DIR}/*.ixx"
+)
+
+message("= Modules Directory: ${TEST_GAME_MODULES_DIR}")
 
 # Libraries
 set(TEST_GAME_INCLUDE_DIRS)
@@ -35,11 +48,38 @@ list(APPEND TEST_GAME_LIBRARIES Engine)
 
 # Create Executable File
 include_directories(${TEST_GAME_INCLUDES_DIR})
-add_executable(TestGame ${TEST_GAME_SOURCES})
+
+add_executable(TestGame)
+target_sources(TestGame
+    PRIVATE
+        ${TEST_GAME_SOURCES}
+    PUBLIC
+        FILE_SET headers
+        TYPE HEADERS
+        BASE_DIRS ${TEST_GAME_INCLUDES_DIR}
+        FILES ${TEST_GAME_INCLUDES}
+    PUBLIC
+        FILE_SET modules
+        TYPE CXX_MODULES
+        BASE_DIRS ${TEST_GAME__MODULES_DIR}
+        FILES ${TEST_GAME_MODULES}
+)
 
 # Link Libraries
 target_include_directories(TestGame PUBLIC ${TEST_GAME_INCLUDE_DIRS})
 target_link_libraries(TestGame PRIVATE ${TEST_GAME_LIBRARIES})
+target_compile_features(TestGame PUBLIC cxx_std_20)
+if(MSVC)
+    target_compile_options(TestGame PRIVATE
+            /std:c++20
+            /EHsc
+    )
+else()
+    target_compile_options(TestGame PRIVATE
+            -fmodules-ts
+            -std=c++20
+    )
+endif()
 
 set_target_properties(TestGame
     PROPERTIES

@@ -1,9 +1,11 @@
-#pragma once
+module;
 #include <memory>
 
-#include "GameObject.fwd.h"
+export module Engine.Components:Component;
 
-class Component {
+// TODO: Module forward declaration
+
+export class Component {
 public:
     Component() = default;
 
@@ -38,6 +40,5 @@ public:
     }
 
 protected:
-    friend class GameObject;
     std::weak_ptr<GameObject> m_GameObject;
 };

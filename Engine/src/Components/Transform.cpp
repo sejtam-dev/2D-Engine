@@ -1,4 +1,10 @@
-#include "Components/Transform.h"
+module;
+#include "glm/fwd.hpp"
+#include "glm/vec2.hpp"
+#include "glm/vec3.hpp"
+#include <glm/gtc/matrix_transform.hpp>
+
+module Engine.Components;
 
 glm::mat4 Transform::GetTransform() {
     if (!m_TransformDirty) {

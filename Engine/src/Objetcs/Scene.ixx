@@ -1,32 +1,58 @@
-#pragma once
+module;
+
 #include <memory>
 #include <vector>
+#include <algorithm>
+#include <string>
 
-#include "GameObject.fwd.h"
+export module Engine.Objects:Scene;
 
-class Scene : public std::enable_shared_from_this<Scene> {
+import :GameObject;
+
+export class Scene : public std::enable_shared_from_this<Scene> {
 public:
-    static std::shared_ptr<Scene> Create();
+    virtual ~Scene() = default;
+
+    static std::shared_ptr<Scene> Create() {
+        std::shared_ptr<Scene> scene = std::make_shared<Scene>();
+
+        scene->Initialize();
+
+        return scene;
+    }
 
     std::shared_ptr<GameObject> CreateGameObject();
 
     void DestroyGameObject(const std::shared_ptr<GameObject>& gameObject);
 
     void OnAwake(); // TODO: Implement call
+
     void OnStart();
 
     void OnUpdate();
 
     void OnFixedUpdate(); // TODO: Implement call
+
     void OnDraw();
 
     void OnDestroy();
 
-    void OnEnable();  // TODO: Implement call
+    void OnEnable(); // TODO: Implement call
+
     void OnDisable(); // TODO: Implement call
 
     template<typename T>
-    std::vector<std::shared_ptr<GameObject>> FindGameObjectsWithComponent() const;
+    std::vector<std::shared_ptr<GameObject>> FindGameObjectsWithComponent() const {
+        std::vector<std::shared_ptr<GameObject>> gameObjects;
+
+        for (auto const& value: m_GameObjects) {
+            if (value->HasComponent<T>()) {
+                gameObjects.push_back(value);
+            }
+        }
+
+        return gameObjects;
+    }
 
     const std::vector<std::shared_ptr<GameObject>>& GetGameObjects() const {
         return m_GameObjects;

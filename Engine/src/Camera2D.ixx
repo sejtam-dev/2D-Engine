@@ -1,13 +1,14 @@
-#pragma once
+module;
 #include "Utils.h"
 #include "glm/fwd.hpp"
 #include "glm/vec2.hpp"
+#include "glm/gtc/matrix_transform.hpp"
 
-class Camera2D {
+export module Engine:Camera2D;
+
+export class Camera2D {
 public:
-    Camera2D(const float width, const float height)
-        : m_Width(width), m_Height(height) {
-    }
+    Camera2D(const float width, const float height);
 
     glm::mat4 GetViewMatrix() const;
 

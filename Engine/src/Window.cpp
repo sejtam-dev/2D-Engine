@@ -1,8 +1,12 @@
-#include "Window.h"
-#include "Engine.h"
+module;
+#include "Utils.h"
+#include "GLFW/glfw3.h"
+#include <string>
 
-Window::Window(int const width, int const height, std::string title)
-    : title(std::move(title)), width(width), height(height) {
+module Engine;
+
+Window::Window(const int width, const int height, std::string title)
+    : title(std::move(title)), width(width), height(height), m_window(nullptr), m_changeSizeEvent(nullptr) {
     glfwInit();
 }
 
@@ -42,15 +46,4 @@ void Window::FrameBufferResizeCallback(GLFWwindow* window, const int width, cons
     if (engineWindow->m_changeSizeEvent) {
         engineWindow->m_changeSizeEvent(engineWindow, width, height);
     }
-}
-
-void Window::ChangeSizeEvent(const EngineChangeSize event) {
-    m_changeSizeEvent = event;
-}
-
-void Window::ChangeSize(const int width, const int height) {
-    this->width = width;
-    this->height = height;
-
-    glfwSetWindowSize(m_window, width, height);
 }

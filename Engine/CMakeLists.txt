@@ -1,6 +1,4 @@
-﻿cmake_minimum_required (VERSION 3.11)
-
-message("")
+﻿message("")
 message("====== Engine ======")
 message("=")
 
@@ -14,15 +12,30 @@ message("= ")
 
 # Headers
 set(ENGINE_INCLUDES_DIR ${ENGINE_ROOT_DIR}/include)
-file(GLOB Engine_INCLUDES "${ENGINE_INCLUDES_DIR}/*.h" "${ENGINE_INCLUDES_DIR}/*.hpp")
+file(GLOB_RECURSE Engine_INCLUDES
+        "${ENGINE_INCLUDES_DIR}/*.h"
+        "${ENGINE_INCLUDES_DIR}/*.hpp"
+)
 
 message("= Headers Directory: ${ENGINE_INCLUDES_DIR}")
 
 # Source
 set(ENGINE_SOURCE_DIR ${ENGINE_ROOT_DIR}/src)
-file(GLOB ENGINE_SOURCES "${ENGINE_SOURCE_DIR}/*.c" "${ENGINE_SOURCE_DIR}/*.cpp")
+file(GLOB_RECURSE ENGINE_SOURCES
+        "${ENGINE_SOURCE_DIR}/*.c"
+        "${ENGINE_SOURCE_DIR}/*.cpp"
+        "${ENGINE_SOURCE_DIR}/*.cxx"
+)
 
 message("= Source Directory: ${ENGINE_SOURCE_DIR}")
+
+# Modules
+set(ENGINE_MODULES_DIR ${ENGINE_ROOT_DIR}/src)
+file(GLOB_RECURSE ENGINE_MODULES
+        "${ENGINE_MODULES_DIR}/*.ixx"
+)
+
+message("= Modules Directory: ${ENGINE_MODULES_DIR}")
 
 # Libraries
 set(ENGINE_INCLUDE_DIRS)
@@ -48,11 +61,42 @@ endif()
 
 # Create Library
 include_directories(${ENGINE_INCLUDES_DIR})
+
 add_library(Engine SHARED ${ENGINE_SOURCES})
+target_sources(Engine
+    PUBLIC
+        ${ENGINE_SOURCES}
+    PUBLIC
+        FILE_SET headers
+        TYPE HEADERS
+        BASE_DIRS ${ENGINE_INCLUDES_DIR}
+        FILES ${ENGINE_INCLUDES}
+    PUBLIC
+        FILE_SET modules
+        TYPE CXX_MODULES
+        BASE_DIRS ${ENGINE_MODULES_DIR}
+        FILES ${ENGINE_MODULES}
+)
+
 
 # Link Libraries
 target_include_directories(Engine PUBLIC ${ENGINE_INCLUDES_DIRS})
 target_link_libraries(Engine PUBLIC ${ENGINE_LIBRARIES})
+target_compile_features(Engine PUBLIC cxx_std_20)
+
+if(MSVC)
+    target_compile_options(Engine PRIVATE
+            /std:c++20
+            /EHsc
+    )
+else()
+    target_compile_options(Engine PRIVATE
+            -fmodules-ts
+            -std=c++20
+    )
+endif()
+
+
 
 set_target_properties(Engine
     PROPERTIES

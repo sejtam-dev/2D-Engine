@@ -1,9 +1,17 @@
-#include "Camera2D.h"
-
+module;
+#include "glm/fwd.hpp"
+#include "glm/vec2.hpp"
 #include "glm/gtc/matrix_transform.hpp"
 
+
+module Engine;
+
+Camera2D::Camera2D(const float width, const float height)
+        : m_Width(width), m_Height(height) {
+}
+
 glm::mat4 Camera2D::GetViewMatrix() const {
-    glm::mat4 view = glm::mat4(1.0f);
+    auto view = glm::mat4(1.0f);
 
     // Translate the view matrix to the camera position
     view = glm::translate(view, glm::vec3(-m_Position, 0.0f));

@@ -1,78 +1,11 @@
-#include "Utils/SceneManager.h"
-
-#include <algorithm>
+module;
+#include "Utils.h"
 #include <ranges>
 
-#include "Scene.h"
-#include "Utils.h"
-
-template<typename T>
-std::string SceneManager::CreateScene() {
-    static_assert(std::is_base_of_v<Scene, T>, "T must inherit from Scene");
-
-    const std::string typeName = GetTypeName<T>();
-    const std::string instanceId = GenerateInstanceID(typeName);
-
-    std::shared_ptr<T> world = T::Create();
-    m_Scenes[instanceId] = world;
-    return instanceId;
-}
-
-template<typename T>
-std::string SceneManager::RegisterScene(const std::shared_ptr<T>& scene) {
-    static_assert(std::is_base_of_v<Scene, T>, "T must inherit from Scene");
-
-    const std::string& sceneInstanceId = scene->GetInstanceID();
-    if (!sceneInstanceId.empty()) {
-        WARNING("Scene is already registered with an instance ID: {}", scene->GetInstanceID());
-
-        return sceneInstanceId;
-    }
-
-    for (const auto& [id, registeredScene]: m_Scenes) {
-        if (registeredScene.get() == scene.get()) {
-            WARNING("Scene already registered with different ID: {}", id);
-            return id;
-        }
-    }
-
-    const std::string typeName = GetTypeName<T>();
-    const std::string instanceId = GenerateInstanceID(typeName);
-
-    scene->SetInstanceID(instanceId);
-    m_Scenes[instanceId] = scene;
-    return instanceId;
-}
-
-template<typename T>
-std::shared_ptr<T> SceneManager::GetScene(const std::string& instanceId) const {
-    static_assert(std::is_base_of_v<Scene, T>, "T must inherit from Scene");
-
-    return std::dynamic_pointer_cast<T>(GetScene(instanceId));
-}
+module Engine.Utils;
 
 std::shared_ptr<Scene> SceneManager::GetScene(const std::string& instanceId) const {
     return m_Scenes.at(instanceId);
-}
-
-template<typename T>
-std::vector<std::shared_ptr<T>> SceneManager::GetScenes() const {
-    static_assert(std::is_base_of_v<Scene, T>, "T must inherit from Scene");
-
-    const std::string typeName = GetTypeName<T>();
-    auto filtered = m_Scenes
-                    | std::views::filter([&typeName](const auto& pair) {
-                        return pair.first.starts_with(typeName);
-                    })
-                    | std::views::values
-                    | std::views::transform([](const auto& scene) {
-                        return std::dynamic_pointer_cast<T>(scene);
-                    })
-                    | std::views::filter([](const auto& scene) {
-                        return scene != nullptr;
-                    });
-
-    return {filtered.begin(), filtered.end()};
 }
 
 std::vector<std::shared_ptr<Scene>> SceneManager::GetScenes() const {
@@ -244,6 +177,30 @@ void SceneManager::ProcessPendingChanges() {
     m_PendingChanges.clear();
 }
 
+void SceneManager::HandleUpdate() const {
+    for (const auto& weakScene: m_SceneStack) {
+        if (const auto scene = weakScene.lock()) {
+            scene->OnUpdate();
+        }
+    }
+}
+
+void SceneManager::HandleFixedUpdate() const {
+    for (const auto& weakScene: m_SceneStack) {
+        if (const auto scene = weakScene.lock()) {
+            scene->OnFixedUpdate();
+        }
+    }
+}
+
+void SceneManager::HandleDraw() const {
+    for (const auto& weakScene: m_SceneStack) {
+        if (const auto scene = weakScene.lock()) {
+            scene->OnDraw();
+        }
+    }
+}
+
 void SceneManager::ApplyPushScene(const std::string& instanceId) {
     if (!m_Scenes.contains(instanceId)) {
         ERROR("Scene with instance ID '{}' does not exist!", instanceId);
@@ -356,22 +313,6 @@ void SceneManager::ApplyReplaceScene(const std::string& oldInstanceId, const std
 
     newScene->OnEnable();
     newScene->OnStart();
-}
-
-template<typename T>
-std::string SceneManager::GetTypeName() const {
-    std::string name = typeid(T).name();
-
-    if (name.starts_with("class ")) {
-        name = name.substr(6);
-    }
-
-    const size_t lastColonIndex = name.find_last_of(':');
-    if (lastColonIndex != std::string::npos) {
-        name = name.substr(lastColonIndex + 1);
-    }
-
-    return name;
 }
 
 std::string SceneManager::GenerateInstanceID(const std::string& typeName) {
