@@ -62,9 +62,9 @@ endif()
 # Create Library
 include_directories(${ENGINE_INCLUDES_DIR})
 
-add_library(Engine SHARED ${ENGINE_SOURCES})
+add_library(Engine SHARED)
 target_sources(Engine
-    PUBLIC
+    PRIVATE
         ${ENGINE_SOURCES}
     PUBLIC
         FILE_SET headers
